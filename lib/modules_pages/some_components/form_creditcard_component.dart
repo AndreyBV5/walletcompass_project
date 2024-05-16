@@ -1,4 +1,3 @@
-
 import 'package:copia_walletfirebase/modules_pages/some_components/extra/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -47,6 +46,7 @@ class _FormCreditCardState extends State<FormCreditCard> {
         colorScheme: ColorScheme.fromSeed(
           brightness: Brightness.light,
           seedColor: Colors.white,
+          // ignore: deprecated_member_use
           background: Colors.black,
           // Defines colors like cursor color of the text fields.
           primary: Colors.black,
@@ -67,6 +67,7 @@ class _FormCreditCardState extends State<FormCreditCard> {
         colorScheme: ColorScheme.fromSeed(
           brightness: Brightness.dark,
           seedColor: Colors.black,
+          // ignore: deprecated_member_use
           background: Colors.white,
           // Defines colors like cursor color of the text fields.
           primary: Colors.white,
@@ -292,6 +293,7 @@ class _FormCreditCardState extends State<FormCreditCard> {
         });
 
         // Mostrar mensaje de éxito
+        // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content:
