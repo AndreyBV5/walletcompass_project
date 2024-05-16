@@ -5,14 +5,16 @@ class IdentificationCard extends StatelessWidget {
     super.key,
     required this.idNumber,
     required this.holderName,
-    required this.birthDate,
+    required this.firstLastname,
+    required this.secondLastname,
     required this.idBackgroundImageAssetPath,
     required this.logoAssetPath,
   });
 
   final String idNumber;
   final String holderName;
-  final String birthDate;
+  final String firstLastname;
+  final String secondLastname;
   final String idBackgroundImageAssetPath;
   final String logoAssetPath;
 
@@ -86,21 +88,28 @@ class IdentificationCard extends StatelessWidget {
                 ),
               ),
             ),
-            Row( // Coloca holderName y birthDate en la misma fila
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  holderName,
+                  'Nombre: $holderName',
                   style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 12,
+                    fontSize: 8,
                   ),
                 ),
                 Text(
-                  birthDate,
+                  '1° Apellido: $firstLastname',
                   style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 16,
+                    fontSize: 8,
+                  ),
+                ),
+                Text(
+                  '2° Apellido: $secondLastname',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 8,
                   ),
                 ),
               ],

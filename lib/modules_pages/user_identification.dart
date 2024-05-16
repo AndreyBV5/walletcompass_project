@@ -1,7 +1,6 @@
-
+import 'package:flutter/material.dart';
 import 'package:copia_walletfirebase/model/identification_card.dart';
 import 'package:copia_walletfirebase/modules_pages/some_components/drawer_component.dart';
-import 'package:flutter/material.dart';
 import 'package:stacked_card_carousel/stacked_card_carousel.dart';
 
 class Identification extends StatefulWidget {
@@ -15,8 +14,9 @@ class _IdentificationState extends State<Identification> {
   final List<Widget> idCards = <Widget>[
     const IdentificationCard(
       idNumber: "123456789",
-      holderName: "Juan Pérez",
-      birthDate: "01/01/1980",
+      holderName: "Juan",
+      firstLastname: "Pérez",
+      secondLastname: "Gómez",
       idBackgroundImageAssetPath: "assets/images/card_bg.png",
       logoAssetPath: "assets/images/bandera-costarica.png",
     ),
