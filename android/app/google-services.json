@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "87727049816",
+    "project_id": "walletcompass-project",
+    "storage_bucket": "walletcompass-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:87727049816:android:dee57ff2412eabebaf8e2d",
+        "android_client_info": {
+          "package_name": "com.example.app_walletcompass"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBM4E_6b5ksxz698J6NoxDtgrFYBd-4TPQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:87727049816:android:7317147a58c7ed7aaf8e2d",
+        "android_client_info": {
+          "package_name": "com.example.copia_walletfirebase"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBM4E_6b5ksxz698J6NoxDtgrFYBd-4TPQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
