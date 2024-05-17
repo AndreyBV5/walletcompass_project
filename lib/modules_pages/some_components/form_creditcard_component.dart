@@ -35,7 +35,7 @@ class _FormCreditCardState extends State<FormCreditCard> {
       isLightTheme ? SystemUiOverlayStyle.dark : SystemUiOverlayStyle.light,
     );
     return MaterialApp(
-      title: 'Flutter Credit Card View Demo',
+      //title: 'Flutter Credit Card View Demo',
       debugShowCheckedModeBanner: false,
       themeMode: isLightTheme ? ThemeMode.light : ThemeMode.dark,
       theme: ThemeData(
@@ -114,7 +114,7 @@ class _FormCreditCardState extends State<FormCreditCard> {
                       expiryDate: expiryDate,
                       cardHolderName: cardHolderName,
                       cvvCode: cvvCode,
-                      bankName: 'Axis Bank',
+                      bankName: 'CR',
                       frontCardBorder: useGlassMorphism
                           ? null
                           : Border.all(color: Colors.grey),
@@ -163,64 +163,22 @@ class _FormCreditCardState extends State<FormCreditCard> {
                               onCreditCardModelChange: onCreditCardModelChange,
                             ),
                             const SizedBox(height: 20),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 16),
+                            const Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 16),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  const Text('Glassmorphism'),
-                                  const Spacer(),
-                                  Switch(
-                                    value: useGlassMorphism,
-                                    inactiveTrackColor: Colors.grey,
-                                    activeColor: Colors.white,
-                                    activeTrackColor: AppColors.colorE5D1B2,
-                                    onChanged: (bool value) => setState(() {
-                                      useGlassMorphism = value;
-                                    }),
-                                  ),
-                                ],
                               ),
                             ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 16),
+                            const Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 16),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  const Text('Card Image'),
-                                  const Spacer(),
-                                  Switch(
-                                    value: useBackgroundImage,
-                                    inactiveTrackColor: Colors.grey,
-                                    activeColor: Colors.white,
-                                    activeTrackColor: AppColors.colorE5D1B2,
-                                    onChanged: (bool value) => setState(() {
-                                      useBackgroundImage = value;
-                                    }),
-                                  ),
-                                ],
                               ),
                             ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 16),
+                            const Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 16),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  const Text('Floating Card'),
-                                  const Spacer(),
-                                  Switch(
-                                    value: useFloatingAnimation,
-                                    inactiveTrackColor: Colors.grey,
-                                    activeColor: Colors.white,
-                                    activeTrackColor: AppColors.colorE5D1B2,
-                                    onChanged: (bool value) => setState(() {
-                                      useFloatingAnimation = value;
-                                    }),
-                                  ),
-                                ],
                               ),
                             ),
                             const SizedBox(height: 20),
@@ -232,19 +190,7 @@ class _FormCreditCardState extends State<FormCreditCard> {
                                   vertical: 8,
                                 ),
                                 decoration: const BoxDecoration(
-                                  gradient: LinearGradient(
-                                    colors: <Color>[
-                                      AppColors.colorB58D67,
-                                      AppColors.colorB58D67,
-                                      AppColors.colorE5D1B2,
-                                      AppColors.colorF9EED2,
-                                      AppColors.colorEFEFED,
-                                      AppColors.colorF9EED2,
-                                      AppColors.colorB58D67,
-                                    ],
-                                    begin: Alignment(-1, -4),
-                                    end: Alignment(1, 4),
-                                  ),
+                                  color: Color.fromARGB(255, 236, 218, 218),
                                   borderRadius: BorderRadius.all(
                                     Radius.circular(8),
                                   ),
@@ -293,7 +239,6 @@ class _FormCreditCardState extends State<FormCreditCard> {
         });
 
         // Mostrar mensaje de éxito
-        // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content:
@@ -301,6 +246,9 @@ class _FormCreditCardState extends State<FormCreditCard> {
             backgroundColor: Colors.green,
           ),
         );
+
+        // Envía de regreso a la página anterior
+        Navigator.pop(context);
       } catch (e) {
         print('Error al insertar datos de tarjeta de crédito: $e');
         // Mostrar mensaje de error si ocurre un problema
