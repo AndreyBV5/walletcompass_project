@@ -1,4 +1,3 @@
-
 import 'package:copia_walletfirebase/modules_pages/home.dart';
 import 'package:copia_walletfirebase/modules_pages/user_identification.dart';
 import 'package:copia_walletfirebase/modules_pages/user_profile.dart';
@@ -73,8 +72,8 @@ class _NavigationDrawerComponentState extends State<NavigationDrawerComponent> {
           runSpacing: 16,
           children: [
             ListTile(
-              leading: const Icon(Icons.home_rounded),
-              title: const Text("Inicio"),
+              leading: const Icon(Icons.credit_card_rounded),
+              title: const Text("Ver Tarjetas"),
               onTap: () {
                 Navigator.of(context).pushReplacement(MaterialPageRoute(
                   builder: (context) => const Home(),
@@ -86,11 +85,11 @@ class _NavigationDrawerComponentState extends State<NavigationDrawerComponent> {
               title: const Text("Ver Identificación"),
               onTap: () {
                 Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  builder: (context) => Identification(),
+                  builder: (context) => const Identification(),
                 ));
               },
             ),
-            ListTile(
+            /* ListTile(
               leading: const Icon(Icons.edit_square),
               title: const Text("Editar Perfil"),
               onTap: () {
@@ -98,7 +97,7 @@ class _NavigationDrawerComponentState extends State<NavigationDrawerComponent> {
                   builder: (context) => const Profile(),
                 ));
               },
-            ),
+            ), */
           ],
         ),
       );

@@ -46,7 +46,7 @@ class _ExpenseControlState extends State<ExpenseControl> {
                     children: [
                       const SizedBox(
                           height:
-                              90), // Espacio en blanco para separar la tarjeta de la lista de gastos
+                              110), // Espacio en blanco para separar la tarjeta de la lista de gastos
                       CreditCard(
                         cardNumber: cardData['numeroTarjeta'],
                         cardHolderName: cardData['nombreTitular'],
@@ -61,7 +61,7 @@ class _ExpenseControlState extends State<ExpenseControl> {
                     ],
                   ),
                   Positioned(
-                    top: 45, // Ajuste del margen superior
+                    top: 65, // Ajuste del margen superior
                     left: 16,
                     right: 16,
                     child: Row(

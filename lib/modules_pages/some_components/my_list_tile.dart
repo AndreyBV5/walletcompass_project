@@ -39,7 +39,7 @@ class MyListTile extends StatelessWidget {
       ]),
       child: ListTile(
         title: Text(title),
-        trailing: Text(trailing),
+        trailing: Text(trailing, style: const TextStyle(fontSize: 16)),
       ),
     );
   }

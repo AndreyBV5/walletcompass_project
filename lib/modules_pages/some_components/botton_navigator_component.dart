@@ -1,4 +1,3 @@
-
 import 'package:copia_walletfirebase/modules_pages/create_identification.dart';
 import 'package:copia_walletfirebase/modules_pages/some_components/form_creditcard_component.dart';
 import 'package:flutter/material.dart';
@@ -36,7 +35,7 @@ class _BottomNavigationBarState extends State<BottomNavigationBarApp> {
   Widget build(BuildContext context) => BottomNavigationBar(
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.badge_rounded,
+            icon: Icon(Icons.portrait_rounded,
                 color: _selectedIndex == 0
                     ? Colors.deepPurple
                     : Colors
