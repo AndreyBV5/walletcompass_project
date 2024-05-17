@@ -1,10 +1,9 @@
 import 'dart:async';
-import 'dart:math';
-
 import 'package:copia_walletfirebase/login_and_register/forgot_password.dart';
 import 'package:copia_walletfirebase/login_and_register/register.dart';
 import 'package:copia_walletfirebase/modules_pages/home.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:progress_state_button/iconed_button.dart';
 import 'package:progress_state_button/progress_button.dart';
 
@@ -16,14 +15,16 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  ButtonState stateTextWithIcon = ButtonState
-      .idle;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  ButtonState stateTextWithIcon = ButtonState.idle;
+
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset:
-          false, //evita que se suba los datos cuando salga el teclado virtual
+      resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
           Positioned(
@@ -56,6 +57,7 @@ class _LoginState extends State<Login> {
                   SizedBox(
                     height: 80,
                     child: TextField(
+                      controller: emailController,
                       decoration: InputDecoration(
                         prefixIcon: const Icon(Icons.email),
                         suffixIcon: const Icon(Icons.clear),
@@ -73,6 +75,7 @@ class _LoginState extends State<Login> {
                   SizedBox(
                     height: 80,
                     child: TextField(
+                      controller: passwordController,
                       obscureText: true,
                       decoration: InputDecoration(
                         prefixIcon: const Icon(Icons.lock),
@@ -90,8 +93,7 @@ class _LoginState extends State<Login> {
                   const SizedBox(height: 20),
                   SizedBox(
                     height: 50,
-                    child:
-                        buildTextWithIcon(), // Aquí se inserta el botón con el estado de éxito
+                    child: buildTextWithIcon(),
                   ),
                   const SizedBox(height: 90),
                   Padding(
@@ -177,29 +179,22 @@ class _LoginState extends State<Login> {
   }
 
   void onPressedIconWithText() async {
-    switch (stateTextWithIcon) {
-      case ButtonState.idle:
-        setState(() {
-          stateTextWithIcon = ButtonState.loading;
-        });
-        await Future.delayed(const Duration(
-            seconds: 2)); // Simular operación de inicio de sesión
-        setState(() {
-          stateTextWithIcon = Random.secure().nextBool()
-              ? ButtonState.success
-              : ButtonState.fail;
-        });
-
-        if (stateTextWithIcon == ButtonState.success) {
-          // Mostrar la animación de éxito durante un breve período de tiempo
-          Timer(const Duration(seconds: 2), () {
-            if (mounted) {
-              setState(() {
-                stateTextWithIcon = ButtonState.idle;
-              });
-            }
+  switch (stateTextWithIcon) {
+    case ButtonState.idle:
+      setState(() {
+        stateTextWithIcon = ButtonState.loading;
+      });
+      try {
+        final UserCredential userCredential =
+            await _auth.signInWithEmailAndPassword(
+          email: emailController.text,
+          password: passwordController.text,
+        );
+        // Si el inicio de sesión es exitoso, establece el estado a éxito
+        if (userCredential.user != null) {
+          setState(() {
+            stateTextWithIcon = ButtonState.success;
           });
-
           // Realizar la navegación solo después de que la animación haya terminado
           Timer(const Duration(seconds: 2), () {
             if (mounted) {
@@ -208,10 +203,18 @@ class _LoginState extends State<Login> {
                   builder: (context) => const Home(),
                 ),
               );
+              // Establecer el estado del botón a 'idle' después de navegar a la pantalla de inicio
+              setState(() {
+                stateTextWithIcon = ButtonState.idle;
+              });
             }
           });
         } else {
-          // Mostrar el estado de falla durante un breve período de tiempo
+          // Si no se encuentra un usuario, establece el estado a fallar
+          setState(() {
+            stateTextWithIcon = ButtonState.fail;
+          });
+          // Establecer el estado del botón a 'idle' después de 2 segundos
           Timer(const Duration(seconds: 2), () {
             if (mounted) {
               setState(() {
@@ -220,13 +223,12 @@ class _LoginState extends State<Login> {
             }
           });
         }
-        break;
-      case ButtonState.loading:
-        break;
-      case ButtonState.success:
-        break;
-      case ButtonState.fail:
-        // Mostrar el estado de falla durante un breve período de tiempo
+      } catch (e) {
+        // Si ocurre algún error durante el inicio de sesión, establece el estado a fallar
+        setState(() {
+          stateTextWithIcon = ButtonState.fail;
+        });
+        // Establecer el estado del botón a 'idle' después de 2 segundos
         Timer(const Duration(seconds: 2), () {
           if (mounted) {
             setState(() {
@@ -234,9 +236,34 @@ class _LoginState extends State<Login> {
             });
           }
         });
-        break;
-    }
+        print("Error al iniciar sesión: $e");
+      }
+      break;
+    case ButtonState.loading:
+      break;
+    case ButtonState.success:
+      // Establecer el estado del botón a 'idle' después de 2 segundos
+      Timer(const Duration(seconds: 2), () {
+        if (mounted) {
+          setState(() {
+            stateTextWithIcon = ButtonState.idle;
+          });
+        }
+      });
+      break;
+    case ButtonState.fail:
+      // Establecer el estado del botón a 'idle' después de 2 segundos
+      Timer(const Duration(seconds: 2), () {
+        if (mounted) {
+          setState(() {
+            stateTextWithIcon = ButtonState.idle;
+          });
+        }
+      });
+      break;
   }
+}
+
 }
 
 class BackgroundPainter extends CustomPainter {
