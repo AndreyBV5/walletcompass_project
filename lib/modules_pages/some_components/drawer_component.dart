@@ -86,7 +86,7 @@ class _NavigationDrawerComponentState extends State<NavigationDrawerComponent> {
               title: const Text("Ver Identificación"),
               onTap: () {
                 Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  builder: (context) => const Identification(),
+                  builder: (context) => Identification(),
                 ));
               },
             ),

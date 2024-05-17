@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart'; // Importa el paquete Firestore
 import 'package:copia_walletfirebase/model/identification_card.dart';
 
 class CreateIdentificationForm extends StatefulWidget {
-  const CreateIdentificationForm({super.key});
+  const CreateIdentificationForm({Key? key}) : super(key: key);
 
   @override
-  State<CreateIdentificationForm> createState() =>
-      _CreateIdentificationFormState();
+  State<CreateIdentificationForm> createState() => _CreateIdentificationFormState();
 }
 
 class _CreateIdentificationFormState extends State<CreateIdentificationForm> {
@@ -14,6 +14,8 @@ class _CreateIdentificationFormState extends State<CreateIdentificationForm> {
   late final TextEditingController holderNameController;
   late final TextEditingController firstLastnameController;
   late final TextEditingController secondLastnameController;
+
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance; // Instancia de Firestore
 
   @override
   void initState() {
@@ -31,6 +33,45 @@ class _CreateIdentificationFormState extends State<CreateIdentificationForm> {
     firstLastnameController.dispose();
     secondLastnameController.dispose();
     super.dispose();
+  }
+
+  Future<void> _saveDataToFirestore() async {
+    try {
+      // Guarda los datos en Firestore en la colección TarjetaCedula
+      await _firestore.collection('TarjetaCedula').add({
+        'nombreCompleto': holderNameController.text,
+        'numeroCedula': idNumberController.text,
+        'primerApellido': firstLastnameController.text,
+        'segundoApellido': secondLastnameController.text,
+      });
+
+      // Mostrar el AlertDialog
+      _showSuccessDialog();
+    } catch (e) {
+      // Manejo de errores
+      print('Error al guardar los datos: $e');
+    }
+  }
+
+  void _showSuccessDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Éxito'),
+          content: const Text('Identificación creada correctamente'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Cerrar el AlertDialog
+                Navigator.of(context).pushReplacementNamed('/home'); // Navegar a la pantalla de inicio
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -64,32 +105,27 @@ class _CreateIdentificationFormState extends State<CreateIdentificationForm> {
                   ),
                   TextFormField(
                     controller: holderNameController,
-                    decoration: const InputDecoration(labelText: 'Nombre'),
+                    decoration: const InputDecoration(labelText: 'Nombre completo'),
                     onChanged: (_) => setState(() {}),
                   ),
                   TextFormField(
                     controller: firstLastnameController,
-                    decoration:
-                        const InputDecoration(labelText: 'Primer apellido'),
+                    decoration: const InputDecoration(labelText: 'Primer apellido'),
                     onChanged: (_) => setState(() {}),
                   ),
                   TextFormField(
                     controller: secondLastnameController,
-                    decoration:
-                        const InputDecoration(labelText: 'Segundo apellido'),
+                    decoration: const InputDecoration(labelText: 'Segundo apellido'),
                     onChanged: (_) => setState(() {}),
                   ),
                   const SizedBox(height: 20),
                   Center(
                     child: ElevatedButton(
-                      onPressed: () {
-                        // Acción al presionar el botón
-                      },
+                      onPressed: _saveDataToFirestore, // Llama al método para guardar en Firestore
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.black, // Color de fondo negro
                         shape: RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.circular(8), // Bordes más cuadrados
+                          borderRadius: BorderRadius.circular(8), // Bordes más cuadrados
                         ),
                       ),
                       child: const Text(
