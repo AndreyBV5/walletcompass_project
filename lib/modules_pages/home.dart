@@ -4,7 +4,7 @@ import 'package:copia_walletfirebase/modules_pages/some_components/drawer_compon
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:stacked_card_carousel/stacked_card_carousel.dart';
-import 'expense_control.dart'; // Importamos la nueva página
+import 'expense_control.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -61,7 +61,9 @@ class _HomeState extends State<Home> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ExpenseControl(cardId: docId),
+                        builder: (context) => ExpenseControl(
+                          cardId: docId,
+                        ),
                       ),
                     );
                   },

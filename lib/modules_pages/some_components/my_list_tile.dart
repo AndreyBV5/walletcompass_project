@@ -22,13 +22,19 @@ class MyListTile extends StatelessWidget {
         // Configurar opciones
         SlidableAction(
           onPressed: onEdithPressed,
-          icon: Icons.settings,
+          icon: Icons.edit_rounded,
+          backgroundColor: Colors.grey,
+          foregroundColor: Colors.white,
+          borderRadius: BorderRadius.circular(4),
         ),
 
         // Borrar opciones
         SlidableAction(
           onPressed: onDeletePressed,
-          icon: Icons.delete,
+          icon: Icons.delete_rounded,
+          backgroundColor: Colors.red,
+          foregroundColor: Colors.white,
+          borderRadius: BorderRadius.circular(4),
         ),
       ]),
       child: ListTile(
