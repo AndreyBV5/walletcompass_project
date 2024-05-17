@@ -1,9 +1,9 @@
 import 'package:copia_walletfirebase/login_and_register/login.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:progress_state_button/iconed_button.dart';
 import 'package:progress_state_button/progress_button.dart';
 import 'dart:async';
-import 'dart:math';
 
 class Register extends StatefulWidget {
   const Register({super.key});
@@ -13,7 +13,12 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   ButtonState stateTextWithIcon = ButtonState.idle;
+
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -47,52 +52,59 @@ class _RegisterState extends State<Register> {
                 SizedBox(
                   height: 80,
                   child: TextField(
-                      decoration: InputDecoration(
-                        prefixIcon: const Icon(Icons.person),
-                        suffixIcon: const Icon(Icons.clear),
-                        labelText: "Nombre de usuario",
-                        hintText: "Andrey Barrios Valver",
-                        helperText: "Ingresa tu nombre de usuario",
-                        filled: false,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      textAlign: TextAlign.center),
-                ),
-                const SizedBox(height: 20),
-                SizedBox(
-                  height: 80,
-                  child: TextField(
-                      decoration: InputDecoration(
-                        prefixIcon: const Icon(Icons.email),
-                        suffixIcon: const Icon(Icons.clear),
-                        labelText: "Correo electronico",
-                        hintText: "Andrey@gmail.com",
-                        helperText: "Ingresa tu correo electronico",
-                        filled: false,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      textAlign: TextAlign.center),
-                ),
-                const SizedBox(height: 20),
-                SizedBox(
-                  height: 80,
-                  child: TextField(
-                      decoration: InputDecoration(
-                        prefixIcon: const Icon(Icons.lock),
-                        suffixIcon: const Icon(Icons.clear),
-                        labelText: "Contraseña",
-                        hintText: "********",
-                        helperText: "Ingresa tu contraseña",
-                        filled: false,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
+                    controller: usernameController,
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(Icons.person),
+                      suffixIcon: const Icon(Icons.clear),
+                      labelText: "Nombre de usuario",
+                      hintText: "Andrey Barrios Valver",
+                      helperText: "Ingresa tu nombre de usuario",
+                      filled: false,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
                       ),
                     ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                SizedBox(
+                  height: 80,
+                  child: TextField(
+                    controller: emailController,
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(Icons.email),
+                      suffixIcon: const Icon(Icons.clear),
+                      labelText: "Correo electronico",
+                      hintText: "Andrey@gmail.com",
+                      helperText: "Ingresa tu correo electronico",
+                      filled: false,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                SizedBox(
+                  height: 80,
+                  child: TextField(
+                    controller: passwordController,
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(Icons.lock),
+                      suffixIcon: const Icon(Icons.clear),
+                      labelText: "Contraseña",
+                      hintText: "********",
+                      helperText: "Ingresa tu contraseña",
+                      filled: false,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    obscureText: true,
+                    textAlign: TextAlign.center,
+                  ),
                 ),
                 const SizedBox(height: 20),
                 SizedBox(
@@ -158,35 +170,33 @@ class _RegisterState extends State<Register> {
         setState(() {
           stateTextWithIcon = ButtonState.loading;
         });
-        await Future.delayed(const Duration(
-            seconds: 2)); // Simular operación de inicio de sesión
-        setState(() {
-          stateTextWithIcon = Random.secure().nextBool()
-              ? ButtonState.success
-              : ButtonState.fail;
-        });
+        try {
+          final UserCredential userCredential =
+              await _auth.createUserWithEmailAndPassword(
+            email: emailController.text,
+            password: passwordController.text,
+          );
 
-        if (stateTextWithIcon == ButtonState.success) {
-          // Mostrar la animación de éxito durante un breve período de tiempo
-          Timer(const Duration(seconds: 2), () {
-            if (mounted) {
-              setState(() {
-                stateTextWithIcon = ButtonState.idle;
-              });
-            }
+          if (userCredential.user != null) {
+            setState(() {
+              stateTextWithIcon = ButtonState.success;
+            });
+            // Realizar la navegación después de registrar al usuario con éxito
+            Timer(const Duration(seconds: 2), () {
+              if (mounted) {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const Login(),
+                  ),
+                );
+              }
+            });
+          }
+        } catch (e) {
+          print("Error al registrar usuario: $e");
+          setState(() {
+            stateTextWithIcon = ButtonState.fail;
           });
-
-          // Realizar la navegación solo después de que la animación haya terminado
-          Timer(const Duration(seconds: 2), () {
-            if (mounted) {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => const Login(),
-                ),
-              );
-            }
-          });
-        } else {
           // Mostrar el estado de falla durante un breve período de tiempo
           Timer(const Duration(seconds: 2), () {
             if (mounted) {
@@ -230,6 +240,9 @@ class BackgroundPainter extends CustomPainter {
 
     canvas.drawPath(path, paint);
   }
+
+ 
+
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
