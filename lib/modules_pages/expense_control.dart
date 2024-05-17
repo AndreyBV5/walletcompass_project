@@ -122,7 +122,7 @@ class _ExpenseControlState extends State<ExpenseControl> {
                     Expense expense = Expense.fromDocument(doc);
                     return Container(
                       decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 131, 117, 117)
+                          color: const Color.fromARGB(255, 131, 117, 117)
                               .withOpacity(0.3),
                           borderRadius: BorderRadius.circular(4)),
                       margin: const EdgeInsets.symmetric(
