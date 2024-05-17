@@ -27,10 +27,29 @@ class _IdentificationState extends State<Identification> {
     return Scaffold(
       appBar: AppBar(),
       drawer: const NavigationDrawerComponent(),
-      body: StackedCardCarousel(
-        spaceBetweenItems: 300,
-        items: idCards,
-        type: StackedCardCarouselType.cardsStack,
+      body: Stack(
+        children: [
+          StackedCardCarousel(
+            spaceBetweenItems: 300,
+            items: idCards,
+            type: StackedCardCarouselType.cardsStack,
+          ),
+          Positioned(
+            top: 55,
+            right: 40,
+            child: Container(
+              width: 100, 
+              height: 90, 
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                image: const DecorationImage(
+                  image: AssetImage("assets/images/perfilcedula.jpeg"),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

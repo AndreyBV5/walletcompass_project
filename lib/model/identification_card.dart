@@ -9,6 +9,7 @@ class IdentificationCard extends StatelessWidget {
     required this.secondLastname,
     required this.idBackgroundImageAssetPath,
     required this.logoAssetPath,
+    this.profileImageAssetPath, // Nuevo parámetro opcional para la imagen de perfil
   });
 
   final String idNumber;
@@ -17,6 +18,7 @@ class IdentificationCard extends StatelessWidget {
   final String secondLastname;
   final String idBackgroundImageAssetPath;
   final String logoAssetPath;
+  final String? profileImageAssetPath; // Imagen de perfil opcional
 
   @override
   Widget build(BuildContext context) {
@@ -32,85 +34,157 @@ class IdentificationCard extends StatelessWidget {
       ),
       child: Padding(
         padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Stack(
           children: [
-            Stack(
-              children: [
-                Positioned(
-                  top: 0,
-                  bottom: 20,
-                  child: Image.asset(
-                    logoAssetPath,
-                    height: 30,
-                    width: 25,
+            if (profileImageAssetPath != null) // Mostrar imagen de perfil si está presente
+              Positioned(
+                top: 20,
+                right: 20,
+                child: Container(
+                  width: 50, // Tamaño de la imagen de perfil
+                  height: 50, // Tamaño de la imagen de perfil
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    image: DecorationImage(
+                      image: AssetImage(profileImageAssetPath!),
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.only(left: 35),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end, // Alinea el texto a la derecha
-                    children: [
-                      Text(
-                        'REPúBLICA DE COSTA RICA',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                        ),
-                      ),
-                      Text(
-                        'Tribunal Supremo de Elecciones',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 8,
-                        ),
-                      ),
-                      Text(
-                        'Cédula de Identificación',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 8,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            Center(
-              child: Text(
-                idNumber,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  letterSpacing: 2,
                 ),
               ),
-            ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'Nombre: $holderName',
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 8,
+                Stack(
+                  children: [
+                    Positioned(
+                      top: 0,
+                      bottom: 20,
+                      child: Image.asset(
+                        logoAssetPath,
+                        height: 30,
+                        width: 25,
+                      ),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.only(left: 35),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            'REPÚBLICA DE COSTA RICA',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                            ),
+                          ),
+                          Text(
+                            'Tribunal Supremo de Elecciones',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 8,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 2),
+                          Text(
+                            'Cédula de Identificación',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 8,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 60.0, right: 35.0),
+                  child: Center(
+                    child: Text(
+                      idNumber,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        letterSpacing: 2,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                 ),
-                Text(
-                  '1° Apellido: $firstLastname',
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 8,
-                  ),
-                ),
-                Text(
-                  '2° Apellido: $secondLastname',
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 8,
-                  ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10.0),
+                      child: RichText(
+                        text: TextSpan(
+                          children: [
+                            const TextSpan(
+                              text: 'Nombre: ',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 8,
+                              ),
+                            ),
+                            TextSpan(
+                              text: holderName,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    RichText(
+                      text: TextSpan(
+                        children: [
+                          const TextSpan(
+                            text: '1° Apellido: ',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 8,
+                            ),
+                          ),
+                          TextSpan(
+                            text: firstLastname,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    RichText(
+                      text: TextSpan(
+                        children: [
+                          const TextSpan(
+                            text: '2° Apellido: ',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 8,
+                            ),
+                          ),
+                          TextSpan(
+                            text: secondLastname,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
