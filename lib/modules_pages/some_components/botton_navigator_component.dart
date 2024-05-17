@@ -1,5 +1,5 @@
 
-import 'package:copia_walletfirebase/login_and_register/login.dart';
+import 'package:copia_walletfirebase/modules_pages/create_identification.dart';
 import 'package:copia_walletfirebase/modules_pages/some_components/form_creditcard_component.dart';
 import 'package:flutter/material.dart';
 
@@ -21,7 +21,7 @@ class _BottomNavigationBarState extends State<BottomNavigationBarApp> {
 
       if (_selectedIndex == 0) {
         Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) => const Login(),
+          builder: (context) => const CreateIdentificationForm(),
         ));
       }
       if (_selectedIndex == 1) {

@@ -9,7 +9,7 @@ class IdentificationCard extends StatelessWidget {
     required this.secondLastname,
     required this.idBackgroundImageAssetPath,
     required this.logoAssetPath,
-    this.profileImageAssetPath, // Nuevo parámetro opcional para la imagen de perfil
+    this.profileImageAssetPath,
   });
 
   final String idNumber;
@@ -38,11 +38,11 @@ class IdentificationCard extends StatelessWidget {
           children: [
             if (profileImageAssetPath != null) // Mostrar imagen de perfil si está presente
               Positioned(
-                top: 20,
-                right: 20,
+                bottom: 110,
+                right: 5,
                 child: Container(
-                  width: 50, // Tamaño de la imagen de perfil
-                  height: 50, // Tamaño de la imagen de perfil
+                  width: 90, // Tamaño de la imagen de perfil
+                  height: 100, // Tamaño de la imagen de perfil
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     image: DecorationImage(
