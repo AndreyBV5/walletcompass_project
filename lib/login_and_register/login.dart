@@ -1,14 +1,14 @@
 import 'dart:async';
-import 'package:copia_walletfirebase/login_and_register/forgot_password.dart';
-import 'package:copia_walletfirebase/login_and_register/register.dart';
-import 'package:copia_walletfirebase/modules_pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:progress_state_button/iconed_button.dart';
 import 'package:progress_state_button/progress_button.dart';
+import 'forgot_password.dart';
+import 'register.dart';
+import '../modules_pages/home.dart';
 
 class Login extends StatefulWidget {
-  const Login({super.key});
+  const Login({Key? key}) : super(key: key);
 
   @override
   State<Login> createState() => _LoginState();
@@ -20,6 +20,9 @@ class _LoginState extends State<Login> {
 
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
+  bool showClearEmail = false;
+  bool showClearPassword = false;
 
   @override
   Widget build(BuildContext context) {
@@ -49,20 +52,35 @@ class _LoginState extends State<Login> {
                     child: Text(
                       "Iniciar Sesión",
                       style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Color.fromARGB(255, 124, 85, 173)),
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromARGB(255, 57, 55, 133),
+                      ),
                     ),
                   ),
                   SizedBox(
                     height: 80,
                     child: TextField(
                       controller: emailController,
+                      onChanged: (value) {
+                        setState(() {
+                          showClearEmail = value.isNotEmpty;
+                        });
+                      },
                       decoration: InputDecoration(
                         prefixIcon: const Icon(Icons.email),
-                        suffixIcon: const Icon(Icons.clear),
+                        suffixIcon: showClearEmail
+                            ? IconButton(
+                          icon: const Icon(Icons.clear),
+                          onPressed: () {
+                            setState(() {
+                              emailController.clear();
+                              showClearEmail = false;
+                            });
+                          },
+                        )
+                            : null,
                         labelText: "Correo",
-                        hintText: "Andrey@gmail.com",
                         helperText: "Ingresa tu correo electrónico",
                         filled: false,
                         border: OutlineInputBorder(
@@ -76,12 +94,26 @@ class _LoginState extends State<Login> {
                     height: 80,
                     child: TextField(
                       controller: passwordController,
+                      onChanged: (value) {
+                        setState(() {
+                          showClearPassword = value.isNotEmpty;
+                        });
+                      },
                       obscureText: true,
                       decoration: InputDecoration(
                         prefixIcon: const Icon(Icons.lock),
-                        suffixIcon: const Icon(Icons.clear),
+                        suffixIcon: showClearPassword
+                            ? IconButton(
+                          icon: const Icon(Icons.clear),
+                          onPressed: () {
+                            setState(() {
+                              passwordController.clear();
+                              showClearPassword = false;
+                            });
+                          },
+                        )
+                            : null,
                         labelText: "Contraseña",
-                        hintText: "********",
                         helperText: "Ingresa tu contraseña",
                         filled: false,
                         border: OutlineInputBorder(
@@ -105,8 +137,7 @@ class _LoginState extends State<Login> {
                         InkWell(
                           child: const Text(
                             " Registrarse",
-                            style:
-                                TextStyle(decoration: TextDecoration.underline),
+                            style: TextStyle(decoration: TextDecoration.underline),
                           ),
                           onTap: () {
                             Navigator.push(
@@ -127,8 +158,7 @@ class _LoginState extends State<Login> {
                         InkWell(
                           child: const Text(
                             "Recordar contraseña",
-                            style:
-                                TextStyle(decoration: TextDecoration.underline),
+                            style: TextStyle(decoration: TextDecoration.underline),
                           ),
                           onTap: () {
                             Navigator.push(
@@ -156,28 +186,32 @@ class _LoginState extends State<Login> {
       radius: 10.0,
       iconedButtons: {
         ButtonState.idle: const IconedButton(
-            text: "Iniciar Sesión",
-            icon: Icon(Icons.person, color: Colors.white),
-            color: Color.fromARGB(255, 180, 148, 221)),
-        ButtonState.loading:
-            IconedButton(text: "Cargando", color: Colors.deepPurple.shade700),
+          text: "Iniciar Sesión",
+          icon: Icon(Icons.person, color: Colors.white),
+          color: Color.fromARGB(255, 57, 55, 133),
+        ),
+        ButtonState.loading: IconedButton(
+          text: "Cargando",
+          color: Colors.deepPurple.shade700,
+        ),
         ButtonState.fail: IconedButton(
-            text: "Error",
-            icon: const Icon(Icons.cancel, color: Colors.white),
-            color: Colors.red.shade300),
+          text: "Error",
+          icon: const Icon(Icons.cancel, color: Colors.white),
+          color: Colors.red.shade300,
+        ),
         ButtonState.success: IconedButton(
-            text: "",
-            icon: const Icon(
-              Icons.check_circle,
-              color: Colors.white,
-            ),
-            color: Colors.green.shade400)
+          text: "",
+          icon: const Icon(
+            Icons.check_circle,
+            color: Colors.white,
+          ),
+          color: Colors.green.shade400,
+        )
       },
       onPressed: onPressedIconWithText,
       state: stateTextWithIcon,
     );
   }
-
   void onPressedIconWithText() async {
   switch (stateTextWithIcon) {
     case ButtonState.idle:
@@ -270,7 +304,7 @@ class BackgroundPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint();
-    paint.color = const Color.fromARGB(255, 180, 148, 221);
+    paint.color = const Color.fromARGB(255, 57, 55, 133);
     paint.style = PaintingStyle.fill;
 
     final path = Path();

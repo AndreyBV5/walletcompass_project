@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:copia_walletfirebase/model/identification_card.dart';
 import 'package:quickalert/quickalert.dart';
+import 'package:copia_walletfirebase/modules_pages/some_components/textfield_identification_widget.dart';
 
 class CreateIdentificationForm extends StatefulWidget {
-  const CreateIdentificationForm({Key? key}) : super(key: key);
+  const CreateIdentificationForm({super.key});
 
   @override
-  State<CreateIdentificationForm> createState() => _CreateIdentificationFormState();
+  State<CreateIdentificationForm> createState() =>
+      _CreateIdentificationFormState();
 }
 
 class _CreateIdentificationFormState extends State<CreateIdentificationForm> {
@@ -68,80 +70,109 @@ class _CreateIdentificationFormState extends State<CreateIdentificationForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+      appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 57, 55, 133),
+        leading: TextButton(
+          onPressed: () {
+            Navigator.of(context).pushReplacementNamed('/home');
+          },
+          child: const Row(
             children: [
-              Container(
-                margin: const EdgeInsets.only(top: 60), // Ajusta el margen inferior
-                child: IdentificationCard(
-                  idNumber: idNumberController.text,
-                  holderName: holderNameController.text,
-                  firstLastname: firstLastnameController.text,
-                  secondLastname: secondLastnameController.text,
-                  idBackgroundImageAssetPath: "assets/images/card_bg.png",
-                  logoAssetPath: "assets/images/bandera-costarica.png",
-                  profileImageAssetPath: "assets/images/perfilcedula.jpeg",
+              Icon(Icons.arrow_back_ios, color: Colors.white),
+              SizedBox(width: 8),
+            ],
+          ),
+        ),
+      ),
+      body: Container(
+        color: const Color.fromARGB(255, 255, 255, 255),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(top: 30),
+                  child: IdentificationCard(
+                    idNumber: idNumberController.text,
+                    holderName: holderNameController.text,
+                    firstLastname: firstLastnameController.text,
+                    secondLastname: secondLastnameController.text,
+                    idBackgroundImageAssetPath: "assets/images/card_bg.png",
+                    logoAssetPath: "assets/images/bandera-costarica.png",
+                    profileImageAssetPath: "assets/images/perfilcedula.jpeg",
+                  ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                controller: idNumberController,
-                decoration: const InputDecoration(labelText: 'Cédula'),
-                onChanged: (_) => setState(() {}),
-              ),
-              TextFormField(
-                controller: holderNameController,
-                decoration: const InputDecoration(labelText: 'Nombre completo'),
-                onChanged: (_) => setState(() {}),
-              ),
-              TextFormField(
-                controller: firstLastnameController,
-                decoration: const InputDecoration(labelText: 'Primer apellido'),
-                onChanged: (_) => setState(() {}),
-              ),
-              TextFormField(
-                controller: secondLastnameController,
-                decoration: const InputDecoration(labelText: 'Segundo apellido'),
-                onChanged: (_) => setState(() {}),
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ElevatedButton(
+                const SizedBox(height: 16),
+                TextFieldIdentiicationWidget(
+                  label: 'Cédula',
+                  text: idNumberController.text,
+                  onChanged: (text) {
+                    setState(() {
+                      idNumberController.text = text;
+                    });
+                  },
+                  prefixIcon: Icons.person,
+                ),
+                const SizedBox(height: 8), 
+                TextFieldIdentiicationWidget(
+                  label: 'Nombre completo',
+                  text: holderNameController.text,
+                  onChanged: (text) {
+                    setState(() {
+                      holderNameController.text = text;
+                    });
+                  },
+                  prefixIcon: Icons.account_circle,
+                ),
+                const SizedBox(height: 8), // Ajuste del espacio
+                TextFieldIdentiicationWidget(
+                  label: 'Primer apellido',
+                  text: firstLastnameController.text,
+                  onChanged: (text) {
+                    setState(() {
+                      firstLastnameController.text = text;
+                    });
+                  },
+                  prefixIcon: Icons.person_outline,
+                ),
+                const SizedBox(height: 8),
+                TextFieldIdentiicationWidget(
+                  label: 'Segundo apellido',
+                  text: secondLastnameController.text,
+                  onChanged: (text) {
+                    setState(() {
+                      secondLastnameController.text = text;
+                    });
+                  },
+                  prefixIcon: Icons.person_outline,
+                ),
+                const SizedBox(height: 16),
+                SizedBox(
+                  width: double.infinity, // Ancho máximo
+                  child: ElevatedButton(
                     onPressed: _saveDataToFirestore,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black,
+                      backgroundColor: const Color.fromARGB(255, 57, 55, 133),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                    child: const Text(
-                      'Crear Identificación',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).pushReplacementNamed('/home');
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 16),
+                      child: Text(
+                        'Crear Identificación',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                        ),
                       ),
                     ),
-                    child: const Text(
-                      'Volver',
-                      style: TextStyle(color: Colors.white),
-                    ),
                   ),
-                ],
-              ),
-            ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -1,6 +1,6 @@
 import 'package:copia_walletfirebase/modules_pages/home.dart';
 import 'package:copia_walletfirebase/modules_pages/user_identification.dart';
-import 'package:copia_walletfirebase/modules_pages/user_profile.dart';
+// import 'package:copia_walletfirebase/modules_pages/user_profile.dart';
 import 'package:flutter/material.dart';
 
 class NavigationDrawerComponent extends StatefulWidget {
@@ -28,7 +28,7 @@ class _NavigationDrawerComponentState extends State<NavigationDrawerComponent> {
       );
 
   Widget buildHeader(BuildContext context) => Material(
-        color: Colors.deepPurple.shade700,
+        color: const Color.fromARGB(255, 57, 55, 133),
         child: GestureDetector(
           onTap: () {
             setState(() {

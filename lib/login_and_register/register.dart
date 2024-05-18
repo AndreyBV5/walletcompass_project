@@ -1,12 +1,12 @@
-import 'package:copia_walletfirebase/login_and_register/login.dart';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:progress_state_button/iconed_button.dart';
 import 'package:progress_state_button/progress_button.dart';
-import 'dart:async';
+import 'login.dart';
 
 class Register extends StatefulWidget {
-  const Register({super.key});
+  const Register({Key? key}) : super(key: key);
 
   @override
   State<Register> createState() => _RegisterState();
@@ -19,6 +19,10 @@ class _RegisterState extends State<Register> {
   TextEditingController usernameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
+  bool showClearUsername = false;
+  bool showClearEmail = false;
+  bool showClearPassword = false;
 
   @override
   Widget build(BuildContext context) {
@@ -43,28 +47,45 @@ class _RegisterState extends State<Register> {
               children: [
                 const Padding(
                   padding: EdgeInsets.only(bottom: 50),
-                  child: Text("Registrarse",
-                      style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Color.fromARGB(255, 124, 85, 173))),
+                  child: Text(
+                    "Registrarse",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Color.fromARGB(255, 57, 55, 133),
+                    ),
+                  ),
                 ),
                 SizedBox(
                   height: 80,
                   child: TextField(
                     controller: usernameController,
+                    onChanged: (value) {
+                      setState(() {
+                        showClearUsername = value.isNotEmpty;
+                      });
+                    },
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.person),
-                      suffixIcon: const Icon(Icons.clear),
+                      suffixIcon: showClearUsername
+                          ? IconButton(
+                              icon: const Icon(Icons.clear),
+                              onPressed: () {
+                                setState(() {
+                                  usernameController.clear();
+                                  showClearUsername = false;
+                                });
+                              },
+                            )
+                          : null,
                       labelText: "Nombre de usuario",
-                      hintText: "Andrey Barrios Valver",
                       helperText: "Ingresa tu nombre de usuario",
                       filled: false,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    textAlign: TextAlign.center,
+                    textAlign: TextAlign.start,
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -72,18 +93,32 @@ class _RegisterState extends State<Register> {
                   height: 80,
                   child: TextField(
                     controller: emailController,
+                    onChanged: (value) {
+                      setState(() {
+                        showClearEmail = value.isNotEmpty;
+                      });
+                    },
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.email),
-                      suffixIcon: const Icon(Icons.clear),
-                      labelText: "Correo electronico",
-                      hintText: "Andrey@gmail.com",
-                      helperText: "Ingresa tu correo electronico",
+                      suffixIcon: showClearEmail
+                          ? IconButton(
+                              icon: const Icon(Icons.clear),
+                              onPressed: () {
+                                setState(() {
+                                  emailController.clear();
+                                  showClearEmail = false;
+                                });
+                              },
+                            )
+                          : null,
+                      labelText: "Correo electrónico",
+                      helperText: "Ingresa tu correo electrónico",
                       filled: false,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    textAlign: TextAlign.center,
+                    textAlign: TextAlign.start,
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -91,11 +126,25 @@ class _RegisterState extends State<Register> {
                   height: 80,
                   child: TextField(
                     controller: passwordController,
+                    onChanged: (value) {
+                      setState(() {
+                        showClearPassword = value.isNotEmpty;
+                      });
+                    },
                     decoration: InputDecoration(
                       prefixIcon: const Icon(Icons.lock),
-                      suffixIcon: const Icon(Icons.clear),
+                      suffixIcon: showClearPassword
+                          ? IconButton(
+                              icon: const Icon(Icons.clear),
+                              onPressed: () {
+                                setState(() {
+                                  passwordController.clear();
+                                  showClearPassword = false;
+                                });
+                              },
+                            )
+                          : null,
                       labelText: "Contraseña",
-                      hintText: "********",
                       helperText: "Ingresa tu contraseña",
                       filled: false,
                       border: OutlineInputBorder(
@@ -103,7 +152,7 @@ class _RegisterState extends State<Register> {
                       ),
                     ),
                     obscureText: true,
-                    textAlign: TextAlign.center,
+                    textAlign: TextAlign.start,
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -119,9 +168,12 @@ class _RegisterState extends State<Register> {
                     children: [
                       const Text("¿Ya estás registrado?"),
                       InkWell(
-                        child: const Text(" Inicia Sesion",
-                            style: TextStyle(
-                                decoration: TextDecoration.underline)),
+                        child: const Text(
+                          " Inicia Sesión",
+                          style: TextStyle(
+                            decoration: TextDecoration.underline,
+                          ),
+                        ),
                         onTap: () {
                           Navigator.pop(context);
                         },
@@ -142,27 +194,33 @@ class _RegisterState extends State<Register> {
       radius: 10.0,
       iconedButtons: {
         ButtonState.idle: const IconedButton(
-            text: "Crear cuenta",
-            icon: Icon(Icons.person, color: Colors.white),
-            color: Color.fromARGB(255, 180, 148, 221)),
-        ButtonState.loading:
-            IconedButton(text: "Cargando", color: Colors.deepPurple.shade700),
+          text: "Crear cuenta",
+          icon: Icon(Icons.person, color: Colors.white),
+          color: Color.fromARGB(255, 57, 55, 133),
+        ),
+        ButtonState.loading: IconedButton(
+          text: "Cargando",
+          color: Colors.deepPurple.shade700,
+        ),
         ButtonState.fail: IconedButton(
-            text: "Error",
-            icon: const Icon(Icons.cancel, color: Colors.white),
-            color: Colors.red.shade300),
+          text: "Error",
+          icon: const Icon(Icons.cancel, color: Colors.white),
+          color: Colors.red.shade300,
+        ),
         ButtonState.success: IconedButton(
-            text: "",
-            icon: const Icon(
-              Icons.check_circle,
-              color: Colors.white,
-            ),
-            color: Colors.green.shade400)
+          text: "",
+          icon: const Icon(
+            Icons.check_circle,
+            color: Colors.white,
+          ),
+          color: Colors.green.shade400,
+        )
       },
       onPressed: onPressedIconWithText,
       state: stateTextWithIcon,
     );
   }
+
 
   void onPressedIconWithText() async {
     switch (stateTextWithIcon) {
@@ -229,7 +287,7 @@ class BackgroundPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint();
-    paint.color = const Color.fromARGB(255, 180, 148, 221);
+    paint.color = const Color.fromARGB(255, 57, 55, 133);
     paint.style = PaintingStyle.fill;
 
     final path = Path();
