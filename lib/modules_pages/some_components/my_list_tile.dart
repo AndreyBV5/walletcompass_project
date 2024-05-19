@@ -17,29 +17,48 @@ class MyListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Slidable(
-      endActionPane: ActionPane(motion: const BehindMotion(), children: [
-        // Configurar opciones
-        SlidableAction(
-          onPressed: onEdithPressed,
-          icon: Icons.edit_rounded,
-          backgroundColor: Colors.grey,
-          foregroundColor: Colors.white,
-          borderRadius: BorderRadius.circular(4),
-        ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 25),
+      child: Slidable(
+        endActionPane: ActionPane(motion: const ScrollMotion(), children: [
+          // Configurar opciones
+          SlidableAction(
+            onPressed: onEdithPressed,
+            icon: Icons.edit_rounded,
+            backgroundColor: Colors.grey,
+            foregroundColor: Colors.white,
+            borderRadius: BorderRadius.circular(4),
+          ),
 
-        // Borrar opciones
-        SlidableAction(
-          onPressed: onDeletePressed,
-          icon: Icons.delete_rounded,
-          backgroundColor: Colors.red,
-          foregroundColor: Colors.white,
-          borderRadius: BorderRadius.circular(4),
+          // Borrar opciones
+          SlidableAction(
+            onPressed: onDeletePressed,
+            icon: Icons.delete_rounded,
+            backgroundColor: Colors.red,
+            foregroundColor: Colors.white,
+            borderRadius: BorderRadius.circular(4),
+          ),
+        ]),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black
+                    .withOpacity(0.1), // Color y opacidad de la sombra
+                spreadRadius: 1, // Cuánto se expande la sombra
+                blurRadius: 1, // Desenfoque de la sombra
+                offset:
+                    const Offset(0, 3), // Desplazamiento de la sombra (x, y)
+              ),
+            ],
+          ),
+          child: ListTile(
+            title: Text(title),
+            trailing: Text(trailing, style: const TextStyle(fontSize: 16)),
+          ),
         ),
-      ]),
-      child: ListTile(
-        title: Text(title),
-        trailing: Text(trailing, style: const TextStyle(fontSize: 16)),
       ),
     );
   }

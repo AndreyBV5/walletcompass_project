@@ -1,6 +1,5 @@
 import 'package:copia_walletfirebase/modules_pages/home.dart';
 import 'package:copia_walletfirebase/modules_pages/user_identification.dart';
-// import 'package:copia_walletfirebase/modules_pages/user_profile.dart';
 import 'package:flutter/material.dart';
 
 class NavigationDrawerComponent extends StatefulWidget {
@@ -90,15 +89,6 @@ class _NavigationDrawerComponentState extends State<NavigationDrawerComponent> {
                 ));
               },
             ),
-            /* ListTile(
-              leading: const Icon(Icons.edit_square),
-              title: const Text("Editar Perfil"),
-              onTap: () {
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  builder: (context) => const Profile(),
-                ));
-              },
-            ), */
           ],
         ),
       );

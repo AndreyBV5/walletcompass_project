@@ -1,8 +1,22 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:copia_walletfirebase/model/credit_card.dart';
 import 'package:copia_walletfirebase/model/expense.dart';
 import 'package:copia_walletfirebase/modules_pages/some_components/my_list_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+class CustomFabLocation extends FloatingActionButtonLocation {
+  @override
+  Offset getOffset(ScaffoldPrelayoutGeometry scaffoldGeometry) {
+    const double fabHeightOffset = 40.0;
+    final double fabX = scaffoldGeometry.scaffoldSize.width -
+        scaffoldGeometry.floatingActionButtonSize.width -
+        16.0;
+    final double fabY = scaffoldGeometry.scaffoldSize.height -
+        scaffoldGeometry.floatingActionButtonSize.height -
+        fabHeightOffset;
+    return Offset(fabX, fabY);
+  }
+}
 
 class ExpenseControl extends StatefulWidget {
   final String cardId;
@@ -20,6 +34,7 @@ class _ExpenseControlState extends State<ExpenseControl> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButtonLocation: CustomFabLocation(),
       floatingActionButton: FloatingActionButton(
         onPressed: openNewExpenseBox,
         child: const Icon(Icons.add),
@@ -111,19 +126,11 @@ class _ExpenseControlState extends State<ExpenseControl> {
                   itemBuilder: (context, index) {
                     DocumentSnapshot doc = snapshot.data.docs[index];
                     Expense expense = Expense.fromDocument(doc);
-                    return Container(
-                      decoration: BoxDecoration(
-                          color: const Color.fromARGB(255, 131, 117, 117)
-                              .withOpacity(0.3),
-                          borderRadius: BorderRadius.circular(4)),
-                      margin: const EdgeInsets.symmetric(
-                          vertical: 5, horizontal: 25),
-                      child: MyListTile(
-                        title: expense.name,
-                        trailing: expense.amount.toString(),
-                        onEdithPressed: (context) => openEditBox(expense),
-                        onDeletePressed: (context) => openDeleteBox(expense),
-                      ),
+                    return MyListTile(
+                      title: expense.name,
+                      trailing: expense.amount.toString(),
+                      onEdithPressed: (context) => openEditBox(expense),
+                      onDeletePressed: (context) => openDeleteBox(expense),
                     );
                   },
                 );
