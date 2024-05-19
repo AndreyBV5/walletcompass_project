@@ -18,7 +18,7 @@ class MyListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Slidable(
-      endActionPane: ActionPane(motion: const StretchMotion(), children: [
+      endActionPane: ActionPane(motion: const BehindMotion(), children: [
         // Configurar opciones
         SlidableAction(
           onPressed: onEdithPressed,

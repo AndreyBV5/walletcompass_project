@@ -16,6 +16,7 @@ class _NavigationDrawerComponentState extends State<NavigationDrawerComponent> {
 
   @override
   Widget build(BuildContext context) => Drawer(
+        backgroundColor: Colors.white,
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,

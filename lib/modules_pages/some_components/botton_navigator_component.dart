@@ -33,6 +33,7 @@ class _BottomNavigationBarState extends State<BottomNavigationBarApp> {
 
   @override
   Widget build(BuildContext context) => BottomNavigationBar(
+        backgroundColor: Colors.white,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.portrait_rounded,

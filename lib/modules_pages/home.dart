@@ -13,13 +13,22 @@ class Home extends StatefulWidget {
   State<Home> createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   final ValueNotifier<int> _currentIndexNotifier = ValueNotifier<int>(0);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        centerTitle: true,
+        title: const Text(
+          "Billetera",
+          style: TextStyle(
+              fontSize: 26, fontWeight: FontWeight.bold, color: Colors.black),
+        ),
+      ),
       drawer: const NavigationDrawerComponent(),
       bottomNavigationBar: const BottomNavigationBarApp(),
       body: StreamBuilder<QuerySnapshot>(
@@ -50,20 +59,19 @@ class _HomeState extends State<Home> {
                   cardBackgroundImageUrl:
                       'https://cdn.mos.cms.futurecdn.net/DoZSMXF87kCuzbymsuEFHo.jpg',
                   logoAssetPath: 'assets/images/Mastercard-Logo.png',
-                  onDelete: () async {
-                    await FirebaseFirestore.instance
-                        .collection('TarjetaCredito')
-                        .doc(docId)
-                        .delete();
-                  },
-                  isButtonVisible: currentIndex == index,
+                  onLongPress: currentIndex == index
+                      ? () async {
+                          await FirebaseFirestore.instance
+                              .collection('TarjetaCredito')
+                              .doc(docId)
+                              .delete();
+                        }
+                      : null,
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ExpenseControl(
-                          cardId: docId,
-                        ),
+                        builder: (context) => ExpenseControl(cardId: docId),
                       ),
                     );
                   },
@@ -73,7 +81,7 @@ class _HomeState extends State<Home> {
           }).toList();
 
           return StackedCardCarousel(
-            spaceBetweenItems: 300,
+            spaceBetweenItems: 260,
             items: creditCardWidgets,
             type: StackedCardCarouselType.cardsStack,
             onPageChanged: (index) {
@@ -87,6 +95,7 @@ class _HomeState extends State<Home> {
 
   @override
   void dispose() {
+    //_colorAnimationController.dispose();
     _currentIndexNotifier.dispose();
     super.dispose();
   }

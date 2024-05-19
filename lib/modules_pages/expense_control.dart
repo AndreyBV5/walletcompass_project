@@ -26,27 +26,21 @@ class _ExpenseControlState extends State<ExpenseControl> {
       ),
       body: Column(
         children: [
-          // StreamBuilder para la tarjeta de crédito
-          // Dentro del StreamBuilder para la tarjeta de crédito en ExpenseControl
           StreamBuilder(
             stream: FirebaseFirestore.instance
                 .collection('TarjetaCredito')
-                .doc(widget
-                    .cardId) // Filtrar por el ID de la tarjeta seleccionada
+                .doc(widget.cardId)
                 .snapshots(),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (!snapshot.hasData) {
                 return const CircularProgressIndicator();
               }
-              var cardData = snapshot.data
-                  .data(); // Obtener los datos de la tarjeta de crédito
+              var cardData = snapshot.data.data();
               return Stack(
                 children: [
                   Column(
                     children: [
-                      const SizedBox(
-                          height:
-                              110), // Espacio en blanco para separar la tarjeta de la lista de gastos
+                      const SizedBox(height: 110),
                       CreditCard(
                         cardNumber: cardData['numeroTarjeta'],
                         cardHolderName: cardData['nombreTitular'],
@@ -54,14 +48,13 @@ class _ExpenseControlState extends State<ExpenseControl> {
                         cardBackgroundImageUrl:
                             'https://cdn.mos.cms.futurecdn.net/DoZSMXF87kCuzbymsuEFHo.jpg',
                         logoAssetPath: 'assets/images/Mastercard-Logo.png',
-                        onDelete: () {},
-                        isButtonVisible: false,
+                        onLongPress: null,
                         onTap: () {},
                       ),
                     ],
                   ),
                   Positioned(
-                    top: 65, // Ajuste del margen superior
+                    top: 65,
                     left: 16,
                     right: 16,
                     child: Row(
@@ -105,8 +98,6 @@ class _ExpenseControlState extends State<ExpenseControl> {
               );
             },
           ),
-
-          // Lista de gastos
           Expanded(
             child: StreamBuilder(
               stream:
@@ -232,7 +223,7 @@ class _ExpenseControlState extends State<ExpenseControl> {
             'nombre': nameController.text,
             'monto': double.parse(amountController.text),
             'fecha': DateTime.now(),
-            'cardId': widget.cardId, // Añadir cardId aquí
+            'cardId': widget.cardId,
           });
           Navigator.pop(context);
           nameController.clear();
@@ -259,7 +250,7 @@ class _ExpenseControlState extends State<ExpenseControl> {
                 ? double.parse(amountController.text)
                 : expense.amount,
             'fecha': DateTime.now(),
-            'cardId': widget.cardId, // Añadir cardId aquí
+            'cardId': widget.cardId,
           });
           Navigator.pop(context);
           nameController.clear();
