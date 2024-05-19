@@ -71,30 +71,41 @@ class _CreateIdentificationFormState extends State<CreateIdentificationForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 57, 55, 133),
+        backgroundColor: Colors.white,
         leading: TextButton(
           onPressed: () {
             Navigator.of(context).pushReplacementNamed('/home');
           },
           child: const Row(
             children: [
-              Icon(Icons.arrow_back_ios, color: Colors.white),
+              Icon(Icons.arrow_back_ios, color: Colors.black),
               SizedBox(width: 8),
             ],
           ),
         ),
       ),
       body: Container(
-        color: const Color.fromARGB(255, 255, 255, 255),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(top: 30),
-                  child: IdentificationCard(
+        color: const Color.fromARGB(255, 255, 251, 251),
+        child: Center(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.only(right: 16.0, left: 16.0, bottom: 60),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    child: const Text(
+                      "Crear Cédula",
+                      style: TextStyle(
+                        fontSize: 26,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+                  IdentificationCard(
                     idNumber: idNumberController.text,
                     holderName: holderNameController.text,
                     firstLastname: firstLastnameController.text,
@@ -103,75 +114,78 @@ class _CreateIdentificationFormState extends State<CreateIdentificationForm> {
                     logoAssetPath: "assets/images/bandera-costarica.png",
                     profileImageAssetPath: "assets/images/perfilcedula.jpeg",
                   ),
-                ),
-                const SizedBox(height: 16),
-                TextFieldIdentiicationWidget(
-                  label: 'Cédula',
-                  text: idNumberController.text,
-                  onChanged: (text) {
-                    setState(() {
-                      idNumberController.text = text;
-                    });
-                  },
-                  prefixIcon: Icons.person,
-                ),
-                const SizedBox(height: 8), 
-                TextFieldIdentiicationWidget(
-                  label: 'Nombre completo',
-                  text: holderNameController.text,
-                  onChanged: (text) {
-                    setState(() {
-                      holderNameController.text = text;
-                    });
-                  },
-                  prefixIcon: Icons.account_circle,
-                ),
-                const SizedBox(height: 8), // Ajuste del espacio
-                TextFieldIdentiicationWidget(
-                  label: 'Primer apellido',
-                  text: firstLastnameController.text,
-                  onChanged: (text) {
-                    setState(() {
-                      firstLastnameController.text = text;
-                    });
-                  },
-                  prefixIcon: Icons.person_outline,
-                ),
-                const SizedBox(height: 8),
-                TextFieldIdentiicationWidget(
-                  label: 'Segundo apellido',
-                  text: secondLastnameController.text,
-                  onChanged: (text) {
-                    setState(() {
-                      secondLastnameController.text = text;
-                    });
-                  },
-                  prefixIcon: Icons.person_outline,
-                ),
-                const SizedBox(height: 16),
-                SizedBox(
-                  width: double.infinity, // Ancho máximo
-                  child: ElevatedButton(
-                    onPressed: _saveDataToFirestore,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 57, 55, 133),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    child: const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 16),
-                      child: Text(
-                        'Crear Identificación',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
+                  const SizedBox(height: 30),
+                  TextFieldIdentificationWidget(
+                    label: 'Número de identificación',
+                    text: idNumberController.text,
+                    onChanged: (text) {
+                      setState(() {
+                        idNumberController.text = text;
+                      });
+                    },
+                    prefixIcon: Icons.credit_card,
+                  ),
+                  const SizedBox(height: 8),
+                  TextFieldIdentificationWidget(
+                    label: 'Nombre completo',
+                    text: holderNameController.text,
+                    onChanged: (text) {
+                      setState(() {
+                        holderNameController.text = text;
+                      });
+                    },
+                    prefixIcon: Icons.account_circle,
+                  ),
+                  const SizedBox(height: 8),
+                  TextFieldIdentificationWidget(
+                    label: 'Primer apellido',
+                    text: firstLastnameController.text,
+                    onChanged: (text) {
+                      setState(() {
+                        firstLastnameController.text = text;
+                      });
+                    },
+                    prefixIcon: Icons.person,
+                  ),
+                  const SizedBox(height: 8),
+                  TextFieldIdentificationWidget(
+                    label: 'Segundo apellido',
+                    text: secondLastnameController.text,
+                    onChanged: (text) {
+                      setState(() {
+                        secondLastnameController.text = text;
+                      });
+                    },
+                    prefixIcon: Icons.person_2,
+                  ),
+                  const SizedBox(height: 16),
+                  SizedBox(
+                    width: double.infinity,
+                    child: Center(
+                      child: ElevatedButton(
+                        onPressed: _saveDataToFirestore,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.black,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        child: const Padding(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 16, horizontal: 80),
+                          child: Text(
+                            'Crear Identificación',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                            ),
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

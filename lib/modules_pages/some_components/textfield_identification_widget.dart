@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class TextFieldIdentiicationWidget extends StatefulWidget {
+class TextFieldIdentificationWidget extends StatefulWidget {
   final int maxLines;
   final String label;
   final String text;
   final ValueChanged<String> onChanged;
   final IconData? prefixIcon;
 
-  const TextFieldIdentiicationWidget({
+  const TextFieldIdentificationWidget({
     super.key,
     this.maxLines = 1,
     required this.label,
@@ -17,12 +17,12 @@ class TextFieldIdentiicationWidget extends StatefulWidget {
   });
 
   @override
-  State<TextFieldIdentiicationWidget> createState() =>
-      _TextFieldIdentiicationWidgetState();
+  State<TextFieldIdentificationWidget> createState() =>
+      _TextFieldIdentificationWidgetState();
 }
 
-class _TextFieldIdentiicationWidgetState
-    extends State<TextFieldIdentiicationWidget> {
+class _TextFieldIdentificationWidgetState
+    extends State<TextFieldIdentificationWidget> {
   late final TextEditingController controller;
   bool isTextNotEmpty = false;
 
@@ -45,6 +45,16 @@ class _TextFieldIdentiicationWidgetState
     setState(() {
       isTextNotEmpty = controller.text.isNotEmpty;
     });
+  }
+
+  OutlineInputBorder _buildBorder(Color color) {
+    return OutlineInputBorder(
+      borderRadius: BorderRadius.circular(5),
+      borderSide: BorderSide(
+        color: color,
+        width: 1.5, // Ajusta el grosor del borde aquí
+      ),
+    );
   }
 
   @override
@@ -72,9 +82,8 @@ class _TextFieldIdentiicationWidgetState
                         child: const Icon(Icons.clear),
                       )
                     : null,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(5),
-                ),
+                focusedBorder: _buildBorder(Colors.grey),
+                enabledBorder: _buildBorder(Colors.black),
                 contentPadding:
                     const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
                 filled: true,
