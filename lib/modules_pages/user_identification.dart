@@ -37,10 +37,14 @@ class _IdentificationState extends State<Identification> {
 
   void _showEditDialog(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
-    final idNumberController = TextEditingController(text: data['numeroCedula'].toString());
-    final holderNameController = TextEditingController(text: data['nombreCompleto']);
-    final firstLastnameController = TextEditingController(text: data['primerApellido']);
-    final secondLastnameController = TextEditingController(text: data['segundoApellido']);
+    final idNumberController =
+        TextEditingController(text: data['numeroCedula'].toString());
+    final holderNameController =
+        TextEditingController(text: data['nombreCompleto']);
+    final firstLastnameController =
+        TextEditingController(text: data['primerApellido']);
+    final secondLastnameController =
+        TextEditingController(text: data['segundoApellido']);
 
     showDialog(
       context: context,
@@ -57,15 +61,18 @@ class _IdentificationState extends State<Identification> {
                 ),
                 TextField(
                   controller: holderNameController,
-                  decoration: const InputDecoration(labelText: 'Nombre Completo'),
+                  decoration:
+                      const InputDecoration(labelText: 'Nombre Completo'),
                 ),
                 TextField(
                   controller: firstLastnameController,
-                  decoration: const InputDecoration(labelText: 'Primer Apellido'),
+                  decoration:
+                      const InputDecoration(labelText: 'Primer Apellido'),
                 ),
                 TextField(
                   controller: secondLastnameController,
-                  decoration: const InputDecoration(labelText: 'Segundo Apellido'),
+                  decoration:
+                      const InputDecoration(labelText: 'Segundo Apellido'),
                 ),
               ],
             ),
@@ -94,7 +101,8 @@ class _IdentificationState extends State<Identification> {
                   print('Error al eliminar los datos: $e');
                 }
               },
-              child: const Text('Eliminar', style: TextStyle(color: Colors.red)),
+              child:
+                  const Text('Eliminar', style: TextStyle(color: Colors.red)),
             ),
             TextButton(
               onPressed: () async {
@@ -118,7 +126,8 @@ class _IdentificationState extends State<Identification> {
                   print('Error al actualizar los datos: $e');
                 }
               },
-              child: const Text('Guardar', style: TextStyle(color: Colors.green)),
+              child:
+                  const Text('Guardar', style: TextStyle(color: Colors.green)),
             ),
           ],
         );
