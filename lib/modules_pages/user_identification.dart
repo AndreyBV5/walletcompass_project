@@ -16,17 +16,14 @@ class _IdentificationState extends State<Identification> {
   @override
   void initState() {
     super.initState();
-    // Llama a la función para cargar los datos de Firestore
     _loadDataFromFirestore();
   }
 
-  // Función para cargar los datos de Firestore
   Future<void> _loadDataFromFirestore() async {
     try {
       var querySnapshot =
           await FirebaseFirestore.instance.collection('TarjetaCedula').get();
 
-      // Actualiza la lista idDocuments con los datos obtenidos de Firestore
       setState(() {
         idDocuments = querySnapshot.docs;
       });

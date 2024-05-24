@@ -71,7 +71,7 @@ class _CreateIdentificationFormState extends State<CreateIdentificationForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: const Color.fromARGB(255, 255, 251, 251),
         leading: TextButton(
           onPressed: () {
             Navigator.of(context).pushReplacementNamed('/home');

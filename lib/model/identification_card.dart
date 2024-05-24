@@ -18,7 +18,7 @@ class IdentificationCard extends StatelessWidget {
   final String secondLastname;
   final String idBackgroundImageAssetPath;
   final String logoAssetPath;
-  final String? profileImageAssetPath; // Imagen de perfil opcional
+  final String? profileImageAssetPath;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +36,7 @@ class IdentificationCard extends StatelessWidget {
         padding: const EdgeInsets.all(20),
         child: Stack(
           children: [
-            if (profileImageAssetPath != null) // Mostrar imagen de perfil si está presente
+            if (profileImageAssetPath != null)
               Positioned(
                 bottom: 110,
                 right: 5,

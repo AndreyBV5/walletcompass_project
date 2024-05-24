@@ -1,4 +1,5 @@
 import 'package:copia_walletfirebase/modules_pages/home.dart';
+import 'package:copia_walletfirebase/modules_pages/user_carnet.dart';
 import 'package:copia_walletfirebase/modules_pages/user_identification.dart';
 import 'package:flutter/material.dart';
 
@@ -86,6 +87,15 @@ class _NavigationDrawerComponentState extends State<NavigationDrawerComponent> {
               onTap: () {
                 Navigator.of(context).pushReplacement(MaterialPageRoute(
                   builder: (context) => const Identification(),
+                ));
+              },
+            ),
+             ListTile(
+              leading: const Icon(Icons.credit_card),
+              title: const Text("Ver Carnet Estudiantil"),
+              onTap: () {
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  builder: (context) => const Carnet(),
                 ));
               },
             ),
