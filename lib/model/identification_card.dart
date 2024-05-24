@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class IdentificationCard extends StatelessWidget {
+  
   const IdentificationCard({
     super.key,
     required this.idNumber,

@@ -11,12 +11,20 @@ class Identification extends StatefulWidget {
 }
 
 class _IdentificationState extends State<Identification> {
+  late PageController pageController;
   List<DocumentSnapshot> idDocuments = [];
 
   @override
   void initState() {
     super.initState();
+    pageController = PageController();
     _loadDataFromFirestore();
+  }
+
+  @override
+  void dispose() {
+    pageController.dispose();
+    super.dispose();
   }
 
   Future<void> _loadDataFromFirestore() async {
