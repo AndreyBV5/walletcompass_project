@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 
 class CarnetEstudiante extends StatelessWidget {
   const CarnetEstudiante({
-    Key? key,
+    super.key,
     required this.numeroTarjeta,
-    required this.fechaVencimiento,
     required this.nombreTitular,
-    required this.numeroCuenta,
-  }) : super(key: key);
+    required this.apellidosTitular,
+    required this.numeroCarnet,
+  });
 
   final String numeroTarjeta;
-  final String fechaVencimiento;
   final String nombreTitular;
-  final String numeroCuenta;
+  final String apellidosTitular;
+  final String numeroCarnet;
 
   @override
   Widget build(BuildContext context) {
@@ -37,13 +37,6 @@ class CarnetEstudiante extends StatelessWidget {
               ),
             ),
             Text(
-              'VALID THRU: $fechaVencimiento',
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 12,
-              ),
-            ),
-            Text(
               nombreTitular,
               style: const TextStyle(
                 color: Colors.white,
@@ -52,7 +45,15 @@ class CarnetEstudiante extends StatelessWidget {
               ),
             ),
             Text(
-              numeroCuenta,
+              apellidosTitular,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(
+              numeroCarnet,
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 16,
