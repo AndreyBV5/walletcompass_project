@@ -51,7 +51,7 @@ class _FormCreditCardState extends State<FormCreditCard> {
           backgroundColor: Colors.white,
           leading: TextButton(
             onPressed: () {
-              Navigator.of(context).pushReplacementNamed('/home');
+              Navigator.of(context).pop();
             },
             child: const Row(
               children: [
