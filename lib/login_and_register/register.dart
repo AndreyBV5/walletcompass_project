@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:progress_state_button/iconed_button.dart';
@@ -6,7 +7,7 @@ import 'package:progress_state_button/progress_button.dart';
 import 'login.dart';
 
 class Register extends StatefulWidget {
-  const Register({Key? key}) : super(key: key);
+  const Register({super.key});
 
   @override
   State<Register> createState() => _RegisterState();
@@ -221,6 +222,29 @@ class _RegisterState extends State<Register> {
     );
   }
 
+  void agregarDatosEnPerfil(
+      String username, String email, String password) async {
+    try {
+      // Obtener una referencia a la colección "PerfilPrueba"
+      CollectionReference perfilCollection =
+          FirebaseFirestore.instance.collection('PerfilPrueba');
+
+      // Obtener el ID del usuario actual
+      String userId = FirebaseAuth.instance.currentUser!.uid;
+
+      // Crear un documento con el ID del usuario
+      await perfilCollection.doc(userId).set({
+        'nombreUsuario': username,
+        'correo': email,
+        'contraseña': password,
+      });
+
+      print(
+          'Datos agregados exitosamente en PerfilPrueba con el ID del usuario: $userId');
+    } catch (error) {
+      print('Error al agregar datos en PerfilPrueba: $error');
+    }
+  }
 
   void onPressedIconWithText() async {
     switch (stateTextWithIcon) {
@@ -239,6 +263,14 @@ class _RegisterState extends State<Register> {
             setState(() {
               stateTextWithIcon = ButtonState.success;
             });
+
+            // Insertar los datos en la colección Perfil
+            agregarDatosEnPerfil(
+              usernameController.text,
+              emailController.text,
+              passwordController.text,
+            );
+
             // Realizar la navegación después de registrar al usuario con éxito
             Timer(const Duration(seconds: 2), () {
               if (mounted) {
@@ -298,9 +330,6 @@ class BackgroundPainter extends CustomPainter {
 
     canvas.drawPath(path, paint);
   }
-
- 
-
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => true;

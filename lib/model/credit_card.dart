@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class CreditCard extends StatelessWidget {
+class CreditCard extends StatefulWidget {
   const CreditCard({
     super.key,
     required this.cardNumber,
@@ -21,10 +21,15 @@ class CreditCard extends StatelessWidget {
   final VoidCallback onTap;
 
   @override
+  State<CreditCard> createState() => _CreditCardState();
+}
+
+class _CreditCardState extends State<CreditCard> {
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
-      onLongPress: onLongPress != null
+      onTap: widget.onTap,
+      onLongPress: widget.onLongPress != null
           ? () => _showDeleteConfirmationDialog(context)
           : null,
       child: Container(
@@ -32,7 +37,7 @@ class CreditCard extends StatelessWidget {
         width: 350,
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: NetworkImage(cardBackgroundImageUrl),
+            image: NetworkImage(widget.cardBackgroundImageUrl),
             fit: BoxFit.cover,
           ),
           borderRadius: BorderRadius.circular(15),
@@ -46,13 +51,13 @@ class CreditCard extends StatelessWidget {
               Align(
                 alignment: Alignment.topRight,
                 child: Image.asset(
-                  logoAssetPath,
+                  widget.logoAssetPath,
                   height: 50,
                   width: 50,
                 ),
               ),
               Text(
-                cardNumber,
+                widget.cardNumber,
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 20,
@@ -63,14 +68,14 @@ class CreditCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    cardHolderName,
+                    widget.cardHolderName,
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 16,
                     ),
                   ),
                   Text(
-                    expiryDate,
+                    widget.expiryDate,
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 16,
@@ -104,7 +109,7 @@ class CreditCard extends StatelessWidget {
               child: const Text('Eliminar'),
               onPressed: () {
                 Navigator.of(context).pop(); // Cerrar el diálogo
-                onLongPress
+                widget.onLongPress
                     ?.call(); // Ejecutar la función de eliminar si no es null
               },
             ),

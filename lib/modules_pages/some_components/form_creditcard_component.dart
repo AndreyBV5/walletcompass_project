@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_credit_card/flutter_credit_card.dart';
@@ -164,23 +165,40 @@ class _FormCreditCardState extends State<FormCreditCard> {
   void _onValidate() async {
     if (formKey.currentState?.validate() ?? false) {
       try {
-        final FirebaseFirestore firestore = FirebaseFirestore.instance;
-        await firestore.collection('TarjetaCredito').add({
-          'numeroTarjeta': cardNumber,
-          'nombreTitular': cardHolderName,
-          'fechaVencimiento': expiryDate,
-          'codigoSeguridad': cvvCode,
-        });
+        final FirebaseAuth auth = FirebaseAuth.instance;
+        final User? user = auth.currentUser;
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content:
-                Text('Datos de tarjeta de crédito insertados correctamente.'),
-            backgroundColor: Colors.green,
-          ),
-        );
+        if (user != null) {
+          // Obtener el número actual de tarjetas de crédito del usuario
+          int numeroTarjetas = await obtenerNumeroTarjetasCredito(user.uid);
 
-        Navigator.pop(context);
+          // Llamar a guardarDatosTarjetaCredito con el nombre de la tarjeta incrementado
+          guardarDatosTarjetaCredito(
+            user.uid,
+            cardHolderName,
+            cardNumber,
+            expiryDate,
+            cvvCode,
+            numeroTarjetas + 1, // Incrementar el número de tarjeta
+          );
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content:
+                  Text('Datos de tarjeta de crédito insertados correctamente.'),
+              backgroundColor: Colors.green,
+            ),
+          );
+
+          Navigator.pop(context);
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Error: No se pudo obtener el usuario actual.'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -189,6 +207,84 @@ class _FormCreditCardState extends State<FormCreditCard> {
           ),
         );
       }
+    }
+  }
+
+  void guardarDatosTarjetaCredito(
+      String userId,
+      String nombreTitular,
+      String numeroTarjeta,
+      String fechaExpiracion,
+      String cvv,
+      int numeroTarjetaActual) async {
+    try {
+      // Obtener una referencia al documento del usuario en la colección "PerfilPrueba"
+      DocumentReference userDocRef =
+          FirebaseFirestore.instance.collection('PerfilPrueba').doc(userId);
+
+      // Verificar si el documento del usuario existe
+      DocumentSnapshot userDocSnapshot = await userDocRef.get();
+
+      if (userDocSnapshot.exists) {
+        // Obtener el mapa actual de TarjetasCredito
+        Map<String, dynamic> data =
+            userDocSnapshot.data() as Map<String, dynamic>;
+        Map<String, dynamic> tarjetasCredito =
+            Map<String, dynamic>.from(data['TarjetasCredito'] ?? {});
+
+        // Crear un nuevo mapa para los datos de la nueva tarjeta
+        Map<String, dynamic> nuevaTarjeta = {
+          'nombreTitular': nombreTitular,
+          'numeroTarjeta': numeroTarjeta,
+          'fechaExpiracion': fechaExpiracion,
+          'cvv': cvv,
+        };
+
+        // Nombre de la nueva tarjeta (por ejemplo, "Tarjeta1", "Tarjeta2", etc.)
+        String nombreNuevaTarjeta = 'Tarjeta$numeroTarjetaActual';
+
+        // Agregar la nueva tarjeta al mapa de TarjetasCredito
+        tarjetasCredito[nombreNuevaTarjeta] = nuevaTarjeta;
+
+        // Actualizar el documento con el nuevo mapa de TarjetasCredito
+        await userDocRef.update({'TarjetasCredito': tarjetasCredito});
+
+        print('Datos de la tarjeta de crédito insertados correctamente');
+      } else {
+        print('Error: El documento del usuario no existe');
+      }
+    } catch (error) {
+      print('Error al insertar datos de tarjeta de crédito: $error');
+    }
+  }
+
+  Future<int> obtenerNumeroTarjetasCredito(String userId) async {
+    try {
+      // Obtener una referencia al documento del usuario en la colección "PerfilPrueba"
+      DocumentReference userDocRef =
+          FirebaseFirestore.instance.collection('PerfilPrueba').doc(userId);
+
+      // Obtener el documento del usuario
+      DocumentSnapshot userDocSnapshot = await userDocRef.get();
+
+      // Verificar si el documento del usuario existe
+      if (userDocSnapshot.exists) {
+        // Obtener el mapa actual de TarjetasCredito
+        Map<String, dynamic> data =
+            userDocSnapshot.data() as Map<String, dynamic>;
+        Map<String, dynamic> tarjetasCredito =
+            Map<String, dynamic>.from(data['TarjetasCredito'] ?? {});
+
+        // Devolver el número de tarjetas de crédito actuales
+        return tarjetasCredito.length;
+      } else {
+        // Si el documento no existe, retornar 0
+        return 0;
+      }
+    } catch (error) {
+      // Manejar errores y retornar 0 en caso de error
+      print('Error al obtener el número de tarjetas de crédito: $error');
+      return 0;
     }
   }
 
