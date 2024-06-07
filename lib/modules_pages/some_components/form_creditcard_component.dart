@@ -172,14 +172,17 @@ class _FormCreditCardState extends State<FormCreditCard> {
           // Obtener el número actual de tarjetas de crédito del usuario
           int numeroTarjetas = await obtenerNumeroTarjetasCredito(user.uid);
 
-          // Llamar a guardarDatosTarjetaCredito con el nombre de la tarjeta incrementado
+          // Obtener el siguiente número de tarjeta disponible
+          int siguienteNumeroTarjeta = numeroTarjetas + 1;
+
+          // Llamar a guardarDatosTarjetaCredito con el siguiente número de tarjeta disponible
           guardarDatosTarjetaCredito(
             user.uid,
             cardHolderName,
             cardNumber,
             expiryDate,
             cvvCode,
-            numeroTarjetas + 1, // Incrementar el número de tarjeta
+            siguienteNumeroTarjeta,
           );
 
           ScaffoldMessenger.of(context).showSnackBar(
