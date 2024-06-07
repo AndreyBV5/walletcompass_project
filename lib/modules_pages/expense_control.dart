@@ -43,14 +43,19 @@ class _ExpenseControlState extends State<ExpenseControl> {
         children: [
           StreamBuilder(
             stream: FirebaseFirestore.instance
-                .collection('TarjetaCredito')
+                .collection('PerfilPrueba')
                 .doc(widget.cardId)
                 .snapshots(),
-            builder: (BuildContext context, AsyncSnapshot snapshot) {
+            builder: (BuildContext context,
+                AsyncSnapshot<DocumentSnapshot> snapshot) {
               if (!snapshot.hasData) {
                 return const CircularProgressIndicator();
               }
-              var cardData = snapshot.data.data();
+              var cardData = snapshot.data?.data() as Map<String, dynamic>?;
+              if (cardData == null) {
+                return const Center(
+                    child: Text('No se encontraron datos de la tarjeta.'));
+              }
               return Stack(
                 children: [
                   Column(
@@ -59,7 +64,7 @@ class _ExpenseControlState extends State<ExpenseControl> {
                       CreditCard(
                         cardNumber: cardData['numeroTarjeta'],
                         cardHolderName: cardData['nombreTitular'],
-                        expiryDate: cardData['fechaVencimiento'],
+                        expiryDate: cardData['fechaExpiracion'],
                         cardBackgroundImageUrl:
                             'https://cdn.mos.cms.futurecdn.net/DoZSMXF87kCuzbymsuEFHo.jpg',
                         logoAssetPath: 'assets/images/Mastercard-Logo.png',
@@ -78,17 +83,16 @@ class _ExpenseControlState extends State<ExpenseControl> {
                         StreamBuilder(
                           stream: FirebaseFirestore.instance
                               .collection('Gastos')
+                              .where('cardId', isEqualTo: widget.cardId)
                               .snapshots(),
-                          builder:
-                              (BuildContext context, AsyncSnapshot snapshot) {
+                          builder: (BuildContext context,
+                              AsyncSnapshot<QuerySnapshot> snapshot) {
                             if (!snapshot.hasData) {
                               return const CircularProgressIndicator();
                             }
                             double totalAmount = 0;
-                            for (int i = 0;
-                                i < snapshot.data.docs.length;
-                                i++) {
-                              totalAmount += snapshot.data.docs[i]['monto'];
+                            for (var doc in snapshot.data!.docs) {
+                              totalAmount += doc['monto'];
                             }
                             return Text(
                               'Total: \$${totalAmount.toStringAsFixed(2)}',
@@ -115,16 +119,19 @@ class _ExpenseControlState extends State<ExpenseControl> {
           ),
           Expanded(
             child: StreamBuilder(
-              stream:
-                  FirebaseFirestore.instance.collection('Gastos').snapshots(),
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
+              stream: FirebaseFirestore.instance
+                  .collection('Gastos')
+                  .where('cardId', isEqualTo: widget.cardId)
+                  .snapshots(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (!snapshot.hasData) {
                   return const CircularProgressIndicator();
                 }
                 return ListView.builder(
-                  itemCount: snapshot.data.docs.length,
+                  itemCount: snapshot.data!.docs.length,
                   itemBuilder: (context, index) {
-                    DocumentSnapshot doc = snapshot.data.docs[index];
+                    DocumentSnapshot doc = snapshot.data!.docs[index];
                     Expense expense = Expense.fromDocument(doc);
                     return MyListTile(
                       title: expense.name,
@@ -157,6 +164,7 @@ class _ExpenseControlState extends State<ExpenseControl> {
             TextField(
               controller: amountController,
               decoration: const InputDecoration(hintText: "Gasto"),
+              keyboardType: TextInputType.number,
             ),
           ],
         ),
@@ -186,6 +194,7 @@ class _ExpenseControlState extends State<ExpenseControl> {
             TextField(
               controller: amountController,
               decoration: const InputDecoration(hintText: "Gasto"),
+              keyboardType: TextInputType.number,
             ),
           ],
         ),
