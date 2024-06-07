@@ -16,8 +16,19 @@ class _CarnetState extends State<Carnet> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Carnets de Estudiante'),
-      ),
+          backgroundColor: Colors.white,
+          leading: TextButton(
+            onPressed: () {
+              Navigator.of(context).pushReplacementNamed('/home');
+            },
+            child: const Row(
+              children: [
+                Icon(Icons.arrow_back_ios, color: Colors.black),
+                SizedBox(width: 8),
+              ],
+            ),
+          ),
+        ),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: StackedCardCarousel(

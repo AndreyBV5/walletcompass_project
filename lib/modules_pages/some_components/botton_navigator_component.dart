@@ -53,6 +53,15 @@ class _BottomNavigationBarState extends State<BottomNavigationBarApp> {
             label: 'Crear Tarjeta',
             //tooltip: 'Tarjeta'
           ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.credit_card_rounded,
+                color: _selectedIndex == 2
+                    ? Colors.deepPurple
+                    : Colors
+                        .grey), // Cambiado para que sea morado cuando esté seleccionado
+            label: 'Crear Carné',
+            //tooltip: 'Tarjeta'
+          ),
         ],
         selectedItemColor: Colors.deepPurple,
         currentIndex: _selectedIndex, // Índice seleccionado
