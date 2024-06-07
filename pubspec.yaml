@@ -80,6 +80,7 @@ flutter:
   - assets/images/bandera-costarica.png
   - assets/images/perfilcedula.jpeg
   - assets/images/BN_logo.png
+  - assets/images/LOGO.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
