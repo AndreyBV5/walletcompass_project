@@ -21,6 +21,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      // locale: const Locale('es',''),
       debugShowCheckedModeBanner: false,
       title: 'Wallet Compass',
       theme: ThemeData(

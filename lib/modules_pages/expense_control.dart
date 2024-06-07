@@ -19,17 +19,20 @@ class CustomFabLocation extends FloatingActionButtonLocation {
 }
 
 class ExpenseControl extends StatefulWidget {
-  final String cardId;
+  final Map<String, dynamic> cardId;
 
   const ExpenseControl({super.key, required this.cardId});
 
   @override
-  State<ExpenseControl> createState() => _ExpenseControlState();
+  State<ExpenseControl> createState() => _ExpenseControlState(cardId);
 }
 
 class _ExpenseControlState extends State<ExpenseControl> {
   TextEditingController nameController = TextEditingController();
   TextEditingController amountController = TextEditingController();
+ final Map<String, dynamic> cardId;
+
+_ExpenseControlState( this.cardId);
 
   @override
   Widget build(BuildContext context) {
@@ -41,30 +44,15 @@ class _ExpenseControlState extends State<ExpenseControl> {
       ),
       body: Column(
         children: [
-          StreamBuilder(
-            stream: FirebaseFirestore.instance
-                .collection('PerfilPrueba')
-                .doc(widget.cardId)
-                .snapshots(),
-            builder: (BuildContext context,
-                AsyncSnapshot<DocumentSnapshot> snapshot) {
-              if (!snapshot.hasData) {
-                return const CircularProgressIndicator();
-              }
-              var cardData = snapshot.data?.data() as Map<String, dynamic>?;
-              if (cardData == null) {
-                return const Center(
-                    child: Text('No se encontraron datos de la tarjeta.'));
-              }
-              return Stack(
+          Stack(
                 children: [
                   Column(
                     children: [
                       const SizedBox(height: 110),
                       CreditCard(
-                        cardNumber: cardData['numeroTarjeta'],
-                        cardHolderName: cardData['nombreTitular'],
-                        expiryDate: cardData['fechaExpiracion'],
+                        cardNumber: cardId['numeroTarjeta'].toString(),
+                        cardHolderName: cardId['nombreTitular'].toString(),
+                        expiryDate: cardId['fechaExpiracion'].toString(),
                         cardBackgroundImageUrl:
                             'https://cdn.mos.cms.futurecdn.net/DoZSMXF87kCuzbymsuEFHo.jpg',
                         logoAssetPath: 'assets/images/Mastercard-Logo.png',
@@ -114,9 +102,8 @@ class _ExpenseControlState extends State<ExpenseControl> {
                     ),
                   ),
                 ],
-              );
-            },
-          ),
+              ),
+        
           Expanded(
             child: StreamBuilder(
               stream: FirebaseFirestore.instance

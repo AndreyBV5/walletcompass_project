@@ -114,7 +114,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                           context,
                           MaterialPageRoute(
                             builder: (context) =>
-                                ExpenseControl(cardId: cardId),
+                                ExpenseControl(cardId:userData['TarjetasCredito']),
                           ),
                         );
                       },

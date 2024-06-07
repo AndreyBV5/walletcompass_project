@@ -24,6 +24,7 @@ class _FormCreditCardState extends State<FormCreditCard> {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
 
     return MaterialApp(
+      // locale: const Locale('es', ''),
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.white,
