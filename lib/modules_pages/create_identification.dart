@@ -5,7 +5,7 @@ import 'package:quickalert/quickalert.dart';
 import 'package:copia_walletfirebase/modules_pages/some_components/textfield_identification_widget.dart';
 
 class CreateIdentificationForm extends StatefulWidget {
-  const CreateIdentificationForm({super.key});
+  const CreateIdentificationForm({Key? key});
 
   @override
   State<CreateIdentificationForm> createState() =>
@@ -126,26 +126,34 @@ class _CreateIdentificationFormState extends State<CreateIdentificationForm> {
                     prefixIcon: Icons.credit_card,
                   ),
                   const SizedBox(height: 8),
-                  TextFieldIdentificationWidget(
-                    label: 'Nombre completo',
-                    text: holderNameController.text,
-                    onChanged: (text) {
-                      setState(() {
-                        holderNameController.text = text;
-                      });
-                    },
-                    prefixIcon: Icons.account_circle,
-                  ),
-                  const SizedBox(height: 8),
-                  TextFieldIdentificationWidget(
-                    label: 'Primer apellido',
-                    text: firstLastnameController.text,
-                    onChanged: (text) {
-                      setState(() {
-                        firstLastnameController.text = text;
-                      });
-                    },
-                    prefixIcon: Icons.person,
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextFieldIdentificationWidget(
+                          label: 'Nombre completo',
+                          text: holderNameController.text,
+                          onChanged: (text) {
+                            setState(() {
+                              holderNameController.text = text;
+                            });
+                          },
+                          prefixIcon: Icons.account_circle,
+                        ),
+                      ),
+                      const SizedBox(width: 16), // Espacio entre los campos
+                      Expanded(
+                        child: TextFieldIdentificationWidget(
+                          label: 'Primer apellido',
+                          text: firstLastnameController.text,
+                          onChanged: (text) {
+                            setState(() {
+                              firstLastnameController.text = text;
+                            });
+                          },
+                          prefixIcon: Icons.person,
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 8),
                   TextFieldIdentificationWidget(
