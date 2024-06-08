@@ -19,20 +19,29 @@ class CustomFabLocation extends FloatingActionButtonLocation {
 }
 
 class ExpenseControl extends StatefulWidget {
-  final Map<String, dynamic> cardId;
+  final Map<String, dynamic> cardData;
+  final String nameCard;
+  final String documentId;
 
-  const ExpenseControl({super.key, required this.cardId});
+  const ExpenseControl(
+      {super.key,
+      required this.cardData,
+      required this.nameCard,
+      required this.documentId});
 
   @override
-  State<ExpenseControl> createState() => _ExpenseControlState(cardId);
+  State<ExpenseControl> createState() =>
+      _ExpenseControlState(cardData, nameCard, documentId);
 }
 
 class _ExpenseControlState extends State<ExpenseControl> {
   TextEditingController nameController = TextEditingController();
   TextEditingController amountController = TextEditingController();
- final Map<String, dynamic> cardId;
+  final Map<String, dynamic> cardData;
+  final String nameCard;
+  final String documentId;
 
-_ExpenseControlState( this.cardId);
+  _ExpenseControlState(this.cardData, this.nameCard, this.documentId);
 
   @override
   Widget build(BuildContext context) {
@@ -45,92 +54,71 @@ _ExpenseControlState( this.cardId);
       body: Column(
         children: [
           Stack(
+            children: [
+              Column(
                 children: [
-                  Column(
-                    children: [
-                      const SizedBox(height: 110),
-                      CreditCard(
-                        cardNumber: cardId['numeroTarjeta'].toString(),
-                        cardHolderName: cardId['nombreTitular'].toString(),
-                        expiryDate: cardId['fechaExpiracion'].toString(),
-                        cardBackgroundImageUrl:
-                            'https://cdn.mos.cms.futurecdn.net/DoZSMXF87kCuzbymsuEFHo.jpg',
-                        logoAssetPath: 'assets/images/Mastercard-Logo.png',
-                        onLongPress: null,
-                        onTap: () {},
-                      ),
-                    ],
-                  ),
-                  Positioned(
-                    top: 65,
-                    left: 16,
-                    right: 16,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        StreamBuilder(
-                          stream: FirebaseFirestore.instance
-                              .collection('Gastos')
-                              .where('cardId', isEqualTo: widget.cardId)
-                              .snapshots(),
-                          builder: (BuildContext context,
-                              AsyncSnapshot<QuerySnapshot> snapshot) {
-                            if (!snapshot.hasData) {
-                              return const CircularProgressIndicator();
-                            }
-                            double totalAmount = 0;
-                            for (var doc in snapshot.data!.docs) {
-                              totalAmount += doc['monto'];
-                            }
-                            return Text(
-                              'Total: \$${totalAmount.toStringAsFixed(2)}',
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            );
-                          },
-                        ),
-                        const Text(
-                          'CR',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
+                  const SizedBox(height: 110),
+                  CreditCard(
+                    cardNumber: cardData['numeroTarjeta'].toString(),
+                    cardHolderName: cardData['nombreTitular'].toString(),
+                    expiryDate: cardData['fechaExpiracion'].toString(),
+                    cardBackgroundImageUrl:
+                        'https://cdn.mos.cms.futurecdn.net/DoZSMXF87kCuzbymsuEFHo.jpg',
+                    logoAssetPath: 'assets/images/Mastercard-Logo.png',
+                    onLongPress: null,
+                    onTap: () {},
                   ),
                 ],
               ),
-        
-          Expanded(
-            child: StreamBuilder(
-              stream: FirebaseFirestore.instance
-                  .collection('Gastos')
-                  .where('cardId', isEqualTo: widget.cardId)
-                  .snapshots(),
-              builder: (BuildContext context,
-                  AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (!snapshot.hasData) {
-                  return const CircularProgressIndicator();
-                }
-                return ListView.builder(
-                  itemCount: snapshot.data!.docs.length,
-                  itemBuilder: (context, index) {
-                    DocumentSnapshot doc = snapshot.data!.docs[index];
-                    Expense expense = Expense.fromDocument(doc);
-                    return MyListTile(
-                      title: expense.name,
-                      trailing: expense.amount.toString(),
-                      onEdithPressed: (context) => openEditBox(expense),
-                      onDeletePressed: (context) => openDeleteBox(expense),
-                    );
-                  },
-                );
-              },
-            ),
+              Positioned(
+                top: 65,
+                left: 16,
+                right: 16,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    StreamBuilder(
+                      stream: FirebaseFirestore.instance
+                          .collection('Gastos')
+                          .where('cardId',
+                              isEqualTo: cardData[
+                                  'id']) // Asegúrate de tener un campo 'id' en cardData
+                          .snapshots(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<QuerySnapshot> snapshot) {
+                        if (!snapshot.hasData) {
+                          return const CircularProgressIndicator();
+                        }
+                        double totalAmount = 0;
+                        for (var doc in snapshot.data!.docs) {
+                          totalAmount += doc['monto'];
+                        }
+                        return Text(
+                          'Total: \$${totalAmount.toStringAsFixed(2)}',
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        );
+                      },
+                    ),
+                    const Text(
+                      'CR',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
+          Expanded(
+              child: Center(
+            child: Text(
+                "Mostrar Datos de Gastos" + cardData.toString() + nameCard),
+          )),
         ],
       ),
     );
@@ -222,12 +210,22 @@ _ExpenseControlState( this.cardId);
       onPressed: () {
         if (nameController.text.isNotEmpty &&
             amountController.text.isNotEmpty) {
-          FirebaseFirestore.instance.collection('Gastos').add({
+          Map<String, dynamic> gastoData = {
             'nombre': nameController.text,
             'monto': double.parse(amountController.text),
             'fecha': DateTime.now(),
-            'cardId': widget.cardId,
+          };
+
+          // Obtener la referencia a la colección 'PerfilPrueba'
+          CollectionReference perfilPruebaCollection =
+              FirebaseFirestore.instance.collection('PerfilPrueba');
+
+          // Actualizar el campo 'gastos' dentro de la tarjeta
+          perfilPruebaCollection.doc(documentId).update({
+            'TarjetasCredito.$nameCard.Gastos':
+                FieldValue.arrayUnion([gastoData])
           });
+
           Navigator.pop(context);
           nameController.clear();
           amountController.clear();
@@ -253,7 +251,7 @@ _ExpenseControlState( this.cardId);
                 ? double.parse(amountController.text)
                 : expense.amount,
             'fecha': DateTime.now(),
-            'cardId': widget.cardId,
+            'cardId': cardData['id'], // Usa el cardId correcto
           });
           Navigator.pop(context);
           nameController.clear();

@@ -8,7 +8,7 @@ import 'expense_control.dart';
 import 'package:stacked_card_carousel/stacked_card_carousel.dart';
 
 class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+  const Home({super.key});
 
   @override
   State<Home> createState() => _HomeState();
@@ -39,7 +39,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             return const Center(child: CircularProgressIndicator());
           }
           if (userSnapshot.hasError || userSnapshot.data == null) {
-            return Center(
+            return const Center(
                 child: Text('Error: No se pudo obtener el usuario actual.'));
           }
 
@@ -64,7 +64,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                   snapshot.data?.data() as Map<String, dynamic>?;
               if (userData == null) {
                 // Si el documento del usuario no existe, muestra un mensaje de error
-                return Center(
+                return const Center(
                     child: Text('Error: El documento del usuario no existe.'));
               }
 
@@ -113,8 +113,11 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>
-                                ExpenseControl(cardId:userData['TarjetasCredito']),
+                            builder: (context) => ExpenseControl(
+                              cardData: tarjetasCreditoData[cardId],
+                              nameCard: cardId,
+                              documentId: userId,
+                            ),
                           ),
                         );
                       },
