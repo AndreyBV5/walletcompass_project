@@ -77,24 +77,38 @@ class _ExpenseControlState extends State<ExpenseControl> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    StreamBuilder(
+                    StreamBuilder<DocumentSnapshot>(
                       stream: FirebaseFirestore.instance
-                          .collection('Gastos')
-                          .where('cardId',
-                              isEqualTo: cardData[
-                                  'id']) // Asegúrate de tener un campo 'id' en cardData
+                          .collection('PerfilPrueba')
+                          .doc(documentId)
                           .snapshots(),
                       builder: (BuildContext context,
-                          AsyncSnapshot<QuerySnapshot> snapshot) {
+                          AsyncSnapshot<DocumentSnapshot> snapshot) {
                         if (!snapshot.hasData) {
                           return const CircularProgressIndicator();
                         }
-                        double totalAmount = 0;
-                        for (var doc in snapshot.data!.docs) {
-                          totalAmount += doc['monto'];
+
+                        var data =
+                            snapshot.data!.data() as Map<String, dynamic>?;
+                        if (data == null) {
+                          return const Center(
+                              child: Text(
+                                  'No hay datos disponlbles. Agregue un gasto.'));
                         }
+
+                        var tarjetasCredito =
+                            data['TarjetasCredito'] as Map<String, dynamic>?;
+                        var tarjeta =
+                            tarjetasCredito?[nameCard] as Map<String, dynamic>?;
+                        var gastos = tarjeta?['Gastos'] as List<dynamic>? ?? [];
+
+                        double totalAmount = 0;
+                        for (var gasto in gastos) {
+                          totalAmount += gasto['monto'];
+                        }
+
                         return Text(
-                          'Total: \$${totalAmount.toStringAsFixed(2)}',
+                          'Total: ₡${totalAmount.toStringAsFixed(2)}',
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -115,10 +129,45 @@ class _ExpenseControlState extends State<ExpenseControl> {
             ],
           ),
           Expanded(
-              child: Center(
-            child: Text(
-                "Mostrar Datos de Gastos" + cardData.toString() + nameCard),
-          )),
+            child: StreamBuilder<DocumentSnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection('PerfilPrueba')
+                  .doc(documentId)
+                  .snapshots(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<DocumentSnapshot> snapshot) {
+                if (!snapshot.hasData) {
+                  return const CircularProgressIndicator();
+                }
+
+                var data = snapshot.data!.data() as Map<String, dynamic>?;
+                if (data == null) {
+                  return const Center(child: Text('No data available'));
+                }
+
+                var tarjetasCredito =
+                    data['TarjetasCredito'] as Map<String, dynamic>?;
+                var tarjeta =
+                    tarjetasCredito?[nameCard] as Map<String, dynamic>?;
+                var gastos = tarjeta?['Gastos'] as List<dynamic>? ?? [];
+
+                return ListView.builder(
+                  itemCount: gastos.length,
+                  itemBuilder: (context, index) {
+                    var gasto = gastos[index] as Map<String, dynamic>;
+                    return MyListTile(
+                      title: gasto['nombre'] ?? 'Sin nombre',
+                      trailing: gasto['monto']?.toString() ?? '0',
+                      onEdithPressed: (context) =>
+                          openEditBox(gasto as Expense),
+                      onDeletePressed: (context) =>
+                          openDeleteBox(gasto as Expense),
+                    );
+                  },
+                );
+              },
+            ),
+          ),
         ],
       ),
     );
