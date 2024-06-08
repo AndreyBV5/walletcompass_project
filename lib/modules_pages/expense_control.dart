@@ -155,13 +155,17 @@ class _ExpenseControlState extends State<ExpenseControl> {
                   itemCount: gastos.length,
                   itemBuilder: (context, index) {
                     var gasto = gastos[index] as Map<String, dynamic>;
+                    var expense = Expense(
+                      id: '', // ID puede no ser necesario si no lo usas en Firestore
+                      name: gasto['nombre'] ?? 'Sin nombre',
+                      amount: (gasto['monto'] as num).toDouble(),
+                      date: (gasto['fecha'] as Timestamp).toDate(),
+                    );
                     return MyListTile(
-                      title: gasto['nombre'] ?? 'Sin nombre',
-                      trailing: gasto['monto']?.toString() ?? '0',
-                      onEdithPressed: (context) =>
-                          openEditBox(gasto as Expense),
-                      onDeletePressed: (context) =>
-                          openDeleteBox(gasto as Expense),
+                      title: expense.name,
+                      trailing: expense.amount.toString(),
+                      onEdithPressed: (context) => openEditBox(expense),
+                      onDeletePressed: (context) => openDeleteBox(expense),
                     );
                   },
                 );
@@ -237,7 +241,7 @@ class _ExpenseControlState extends State<ExpenseControl> {
         title: const Text("Borrar gasto?"),
         actions: [
           _cancelButton(),
-          _deleteExpenseButton(expense.id),
+          _deleteExpenseButton(expense),
         ],
       ),
     );
@@ -286,22 +290,39 @@ class _ExpenseControlState extends State<ExpenseControl> {
 
   Widget _editExpenseButton(Expense expense) {
     return MaterialButton(
-      onPressed: () {
+      onPressed: () async {
         if (nameController.text.isNotEmpty ||
             amountController.text.isNotEmpty) {
+          // Obtén el documento actual de la colección
+          DocumentSnapshot doc = await FirebaseFirestore.instance
+              .collection('PerfilPrueba')
+              .doc(documentId)
+              .get();
+
+          // Accede al array de gastos
+          List<dynamic> gastos = doc['TarjetasCredito'][nameCard]['Gastos'];
+
+          // Encuentra el gasto a editar
+          for (var i = 0; i < gastos.length; i++) {
+            if ((gastos[i]['fecha'] as Timestamp).toDate() == expense.date) {
+              // Comparar por fecha, que debería ser única
+              gastos[i]['nombre'] = nameController.text.isNotEmpty
+                  ? nameController.text
+                  : expense.name;
+              gastos[i]['monto'] = amountController.text.isNotEmpty
+                  ? double.parse(amountController.text)
+                  : expense.amount;
+              gastos[i]['fecha'] = Timestamp.fromDate(DateTime.now());
+              break;
+            }
+          }
+
+          // Actualiza el documento con el array de gastos modificado
           FirebaseFirestore.instance
-              .collection('Gastos')
-              .doc(expense.id)
-              .update({
-            'nombre': nameController.text.isNotEmpty
-                ? nameController.text
-                : expense.name,
-            'monto': amountController.text.isNotEmpty
-                ? double.parse(amountController.text)
-                : expense.amount,
-            'fecha': DateTime.now(),
-            'cardId': cardData['id'], // Usa el cardId correcto
-          });
+              .collection('PerfilPrueba')
+              .doc(documentId)
+              .update({'TarjetasCredito.$nameCard.Gastos': gastos});
+
           Navigator.pop(context);
           nameController.clear();
           amountController.clear();
@@ -311,10 +332,43 @@ class _ExpenseControlState extends State<ExpenseControl> {
     );
   }
 
-  Widget _deleteExpenseButton(String id) {
+  Widget _deleteExpenseButton(Expense expense) {
     return MaterialButton(
-      onPressed: () {
-        FirebaseFirestore.instance.collection('Gastos').doc(id).delete();
+      onPressed: () async {
+        // Obtén el documento actual de la colección
+        DocumentReference docRef = FirebaseFirestore.instance
+            .collection('PerfilPrueba')
+            .doc(documentId);
+
+        // Obtén el documento actual
+        DocumentSnapshot doc = await docRef.get();
+
+        // Accede al array de gastos
+        List<dynamic> gastos = doc['TarjetasCredito'][nameCard]['Gastos'];
+
+        // Encuentra el índice del gasto a eliminar
+        int indexToDelete = -1;
+        for (var i = 0; i < gastos.length; i++) {
+          if ((gastos[i]['fecha'] as Timestamp).toDate() == expense.date) {
+            indexToDelete = i;
+            break;
+          }
+        }
+
+        if (indexToDelete != -1) {
+          // Elimina el elemento del array
+          gastos.removeAt(indexToDelete);
+
+          // Actualiza el documento en Firestore con el array de gastos modificado
+          await docRef.update({
+            'TarjetasCredito.$nameCard.Gastos': gastos,
+          });
+
+          print('Gasto eliminado exitosamente.');
+        } else {
+          print('No se encontró el gasto a eliminar.');
+        }
+
         Navigator.pop(context);
       },
       child: const Text('Borrar'),
