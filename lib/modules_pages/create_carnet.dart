@@ -83,7 +83,7 @@ class _CreateCarnetFormState extends State<CreateCarnetForm> {
     );
 
     // Navegar a la pantalla de identificación
-    Navigator.of(context).pushReplacementNamed('/user_carnet');
+    Navigator.of(context).pushReplacementNamed('/view_carnet');
   } catch (e) {
     // Mostrar una alerta de error si ocurre un error al guardar los datos
     ScaffoldMessenger.of(context).showSnackBar(

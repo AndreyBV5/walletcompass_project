@@ -38,7 +38,6 @@ class MyApp extends StatelessWidget {
         '/user_identification': (context) => const Identification(),
         '/view_credit_card': (context) => const Home(),
         '/view_carnet': (context) => const Carnet(),
-        '/user_carnet': (context) => const Carnet(),
       },
     );
   }
