@@ -1,4 +1,4 @@
-import 'package:copia_walletfirebase/modules_pages/some_components/form_creditcard_component.dart';
+import 'package:copia_walletfirebase/modules_pages/create_carnet.dart';
 import 'package:flutter/material.dart';
 
 class BottomNavigationCarnet extends StatefulWidget {
@@ -24,7 +24,7 @@ class _BottomNavigationBarState extends State<BottomNavigationCarnet> {
             onPressed: () {
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
-                  builder: (context) => const FormCreditCard(),
+                  builder: (context) => const CreateCarnetForm(),
                 ),
               );
             },
@@ -37,7 +37,7 @@ class _BottomNavigationBarState extends State<BottomNavigationCarnet> {
                       : Colors.deepPurple,
                 ),
                 Text(
-                  "Crear Identificación",
+                  "Crear Carné",
                   style: TextStyle(
                     color: _selectedIndex == 0
                         ? Colors.deepPurple

@@ -1,4 +1,6 @@
 import 'package:copia_walletfirebase/model/carnet_card.dart';
+import 'package:copia_walletfirebase/modules_pages/some_components/botton_navigator_component_carnet.dart';
+import 'package:copia_walletfirebase/modules_pages/some_components/drawer_component.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked_card_carousel/stacked_card_carousel.dart';
 
@@ -15,20 +17,9 @@ class _CarnetState extends State<Carnet> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-          backgroundColor: Colors.white,
-          leading: TextButton(
-            onPressed: () {
-              Navigator.of(context).pushReplacementNamed('/home');
-            },
-            child: const Row(
-              children: [
-                Icon(Icons.arrow_back_ios, color: Colors.black),
-                SizedBox(width: 8),
-              ],
-            ),
-          ),
-        ),
+      appBar: AppBar(),
+      drawer: const NavigationDrawerComponent(),
+      bottomNavigationBar: const BottomNavigationCarnet(),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: StackedCardCarousel(
@@ -38,7 +29,7 @@ class _CarnetState extends State<Carnet> with SingleTickerProviderStateMixin {
               numeroTarjeta: '12345678912',
               nombreTitular: 'Andrey David',
               apellidosTitular: 'Barrios Valverde',
-              numeroCarnet: "2029", 
+              numeroCarnet: "2029",
               fechaVencimiento: '12/2026',
             ),
           ],
