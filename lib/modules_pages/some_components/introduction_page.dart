@@ -13,8 +13,7 @@ class IntroductionPage extends StatelessWidget {
           title: "Bienvenido a WalletCompass",
           body: "Tu billetera virtual segura y confiable.",
           image: const Padding(
-            padding: EdgeInsets.only(
-                top: 60), // Ajusta este valor según sea necesario
+            padding: EdgeInsets.only(top: 60),
             child: CircleAvatar(
               radius: 140,
               backgroundImage: AssetImage('assets/images/Logo.jpeg'),
@@ -22,12 +21,17 @@ class IntroductionPage extends StatelessWidget {
           ),
           decoration: const PageDecoration(
             titleTextStyle: TextStyle(
-              fontSize: 36.0,
+              fontSize: 38.0,
               fontWeight: FontWeight.bold,
+              shadows: [
+                Shadow(
+                  blurRadius: 5.0,
+                  color: Color.fromARGB(255, 204, 200, 200),
+                  offset: Offset(2.0, 2.9),
+                ),
+              ],
             ),
-            bodyTextStyle: TextStyle(
-              fontSize: 19.0,
-            ),
+            bodyTextStyle: TextStyle(fontSize: 20.0),
             pageColor: Color.fromARGB(255, 233, 247, 236),
           ),
         ),
@@ -41,36 +45,38 @@ class IntroductionPage extends StatelessWidget {
           ),
           decoration: const PageDecoration(
             titleTextStyle:
-                TextStyle(fontSize: 28.0, fontWeight: FontWeight.bold),
-            bodyTextStyle: TextStyle(fontSize: 16.0),
+                TextStyle(fontSize: 29.0, fontWeight: FontWeight.bold),
+            bodyTextStyle: TextStyle(fontSize: 17.0),
             pageColor: Colors.white,
           ),
         ),
         PageViewModel(
           title: "Crea tus Identificaciones",
-          body: "Mantén todas tus identificaciones y de familiares a la mano.",
+          body:
+              "Mantén todas tus identificaciones y la de tus familiares a la mano.",
           image: const Image(
             image: AssetImage('assets/images/cedula.png'),
             height: 250,
           ),
           decoration: const PageDecoration(
             titleTextStyle:
-                TextStyle(fontSize: 28.0, fontWeight: FontWeight.bold),
-            bodyTextStyle: TextStyle(fontSize: 16.0),
+                TextStyle(fontSize: 29.0, fontWeight: FontWeight.bold),
+            bodyTextStyle: TextStyle(fontSize: 17.0),
             pageColor: Colors.white,
           ),
         ),
         PageViewModel(
           title: "Guarda tus Carnets",
-          body: "Mantén todos tus carnets organizados y a la mano.",
+          body:
+              "Administra y mantén todos tus carnets organizados y a la mano en un solo lugar.",
           image: const Image(
             image: AssetImage('assets/images/carnet.png'),
             height: 250,
           ),
           decoration: const PageDecoration(
             titleTextStyle:
-                TextStyle(fontSize: 28.0, fontWeight: FontWeight.bold),
-            bodyTextStyle: TextStyle(fontSize: 16.0),
+                TextStyle(fontSize: 29.0, fontWeight: FontWeight.bold),
+            bodyTextStyle: TextStyle(fontSize: 17.0),
             pageColor: Colors.white,
           ),
         ),
@@ -83,9 +89,12 @@ class IntroductionPage extends StatelessWidget {
       },
       globalBackgroundColor: Colors.white,
       showSkipButton: true,
-      skip: const Text("Saltar"),
+      skip: const Text(
+        "Saltar",
+        style: TextStyle(fontWeight: FontWeight.bold),
+      ),
       next: const Icon(Icons.arrow_forward),
-      done: const Text("Hecho", style: TextStyle(fontWeight: FontWeight.w600)),
+      done: const Text("Hecho", style: TextStyle(fontWeight: FontWeight.bold)),
       dotsDecorator: DotsDecorator(
         size: const Size.square(10.0),
         activeSize: const Size(20.0, 10.0),
