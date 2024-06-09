@@ -79,7 +79,7 @@ flutter:
   - assets/images/perfilcedula.jpeg
   - assets/images/BN_logo.png
   - assets/images/LOGO.png
-  - assets/images/cedula.png
+  - assets/images/tarjetas.png
   - assets/images/carnet.png
 
   # An image asset can refer to one or more resolution-specific "variants", see

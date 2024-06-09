@@ -53,7 +53,7 @@ class _FormCreditCardState extends State<FormCreditCard> {
           backgroundColor: Colors.white,
           leading: TextButton(
             onPressed: () {
-              Navigator.of(context).pop();
+              Navigator.of(context).pushReplacementNamed('/view_credit_card');
             },
             child: const Row(
               children: [
@@ -194,7 +194,7 @@ class _FormCreditCardState extends State<FormCreditCard> {
             ),
           );
 
-          Navigator.pop(context);
+          Navigator.of(context).pushReplacementNamed('/view_credit_card');
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(

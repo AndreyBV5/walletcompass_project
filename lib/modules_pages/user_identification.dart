@@ -1,3 +1,4 @@
+import 'package:copia_walletfirebase/modules_pages/some_components/botton_navigator_component_identification.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:copia_walletfirebase/model/identification_card.dart';
@@ -169,8 +170,7 @@ class _IdentificationState extends State<Identification> {
 
   Future<bool> _onWillPop() async {
     // Aquí puedes agregar la lógica para volver a la pantalla de inicio
-    Navigator.of(context).pushReplacementNamed(
-        '/home'); // Asume que '/home' es tu ruta de inicio
+    Navigator.of(context).pushReplacementNamed('/');
     return false;
   }
 
@@ -181,6 +181,7 @@ class _IdentificationState extends State<Identification> {
       child: Scaffold(
         appBar: AppBar(),
         drawer: const NavigationDrawerComponent(),
+        bottomNavigationBar: const BottomNavigationIdentification(),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: idDocuments.isEmpty
