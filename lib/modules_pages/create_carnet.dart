@@ -136,7 +136,7 @@ class _CreateCarnetFormState extends State<CreateCarnetForm> {
               TextField(
                 controller: numeroTarjetaController,
                 decoration: const InputDecoration(
-                  labelText: 'Número de Tarjeta',
+                  labelText: 'Número de Cédula',
                   border: OutlineInputBorder(),
                   contentPadding:
                       EdgeInsets.symmetric(vertical: 10, horizontal: 10),
@@ -177,7 +177,7 @@ class _CreateCarnetFormState extends State<CreateCarnetForm> {
               TextField(
                 controller: numeroCarnetController,
                 decoration: const InputDecoration(
-                  labelText: 'Número de Carnet',
+                  labelText: 'Número de Carné',
                   border: OutlineInputBorder(),
                   contentPadding:
                       EdgeInsets.symmetric(vertical: 10, horizontal: 10),
