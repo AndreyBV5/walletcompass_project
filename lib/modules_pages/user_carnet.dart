@@ -36,9 +36,10 @@ class _CarnetState extends State<Carnet> with SingleTickerProviderStateMixin {
           items: const [
             CarnetEstudiante(
               numeroTarjeta: '12345678912',
-              nombreTitular: 'ANDREY DAVID',
-              apellidosTitular: 'BARRIOS VALVERDE',
-              numeroCarnet: "20029",
+              nombreTitular: 'Andrey David',
+              apellidosTitular: 'Barrios Valverde',
+              numeroCarnet: "2029", 
+              fechaVencimiento: '12/2026',
             ),
           ],
           type: StackedCardCarouselType.cardsStack,

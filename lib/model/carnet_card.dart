@@ -7,12 +7,14 @@ class CarnetEstudiante extends StatelessWidget {
     required this.nombreTitular,
     required this.apellidosTitular,
     required this.numeroCarnet,
+    required this.fechaVencimiento,
   });
 
   final String numeroTarjeta;
   final String nombreTitular;
   final String apellidosTitular;
   final String numeroCarnet;
+  final String fechaVencimiento;
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +34,7 @@ class CarnetEstudiante extends StatelessWidget {
               children: [
                 const SizedBox(height: 5),
                 Padding(
-                  padding: const EdgeInsets.only(
-                      left: 130),
+                  padding: const EdgeInsets.only(left: 130),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -44,61 +45,66 @@ class CarnetEstudiante extends StatelessWidget {
                           fontSize: 18,
                         ),
                       ),
-                      Text(
-                        numeroCarnet,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left:
+                                10),
+                        child: Text(
+                          numeroCarnet,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold, 
+                          ),
                         ),
                       ),
                     ],
                   ),
                 ),
-                const SizedBox(height: 10),
-                Text(
-                  nombreTitular,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
+                const SizedBox(height: 30), // Adjusted space
+                Padding(
+                  padding: const EdgeInsets.only(left: 10), // Adjusted padding
+                  child: Text(
+                    nombreTitular,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-                Text(
-                  apellidosTitular,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
+                Padding(
+                  padding: const EdgeInsets.only(left: 10), // Adjusted padding
+                  child: Text(
+                    apellidosTitular,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-                const SizedBox(height: 10),
-                Text(
-                  numeroTarjeta,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                const SizedBox(height: 20), // Adjusted space
+                Center(
+                  child: Text(
+                    numeroTarjeta,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
                 const Spacer(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
-                      'Vence 12/2026',
-                      style: TextStyle(
+                    Text(
+                      'Vence: $fechaVencimiento',
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 16,
                       ),
-                    ),
-                    Container(
-                      width: 100,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: const Placeholder(),
                     ),
                   ],
                 ),
@@ -130,8 +136,7 @@ class CarnetEstudiante extends StatelessWidget {
                 height: 90,
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(
-                      10),
+                  borderRadius: BorderRadius.circular(10),
                   image: const DecorationImage(
                     image: AssetImage('assets/images/perfilcedula.jpeg'),
                     fit: BoxFit.cover,

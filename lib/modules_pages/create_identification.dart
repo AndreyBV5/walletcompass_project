@@ -8,11 +8,10 @@ import 'package:copia_walletfirebase/modules_pages/some_components/textfield_ide
 class CreateIdentificationForm extends StatefulWidget {
   final String documentId;
 
-  const CreateIdentificationForm({super.key, required this.documentId});
+  const CreateIdentificationForm({Key? key, required this.documentId}) : super(key: key);
 
   @override
-  State<CreateIdentificationForm> createState() =>
-      _CreateIdentificationFormState(documentId);
+  State<CreateIdentificationForm> createState() => _CreateIdentificationFormState(documentId);
 }
 
 class _CreateIdentificationFormState extends State<CreateIdentificationForm> {
@@ -56,6 +55,16 @@ class _CreateIdentificationFormState extends State<CreateIdentificationForm> {
 
   Future<void> _saveDataToFirestore() async {
     try {
+      // Verificar que los campos no estén vacíos
+      if (idNumberController.text.trim().isEmpty ||
+          holderNameController.text.trim().isEmpty ||
+          firstLastnameController.text.trim().isEmpty ||
+          secondLastnameController.text.trim().isEmpty) {
+        // Mostrar un mensaje de error si algún campo está vacío
+        _showErrorAlert('Por favor, complete todos los campos.');
+        return;
+      }
+
       final tarjetasCedulaRef = _firestore.collection('PerfilPrueba').doc(_uid);
 
       final DocumentSnapshot documentSnapshot = await tarjetasCedulaRef.get();
@@ -81,6 +90,7 @@ class _CreateIdentificationFormState extends State<CreateIdentificationForm> {
       _showSuccessAlert();
     } catch (e) {
       print('Error al guardar los datos: $e');
+      _showErrorAlert('Se produjo un error al guardar los datos.');
     }
   }
 
@@ -99,9 +109,20 @@ class _CreateIdentificationFormState extends State<CreateIdentificationForm> {
     });
   }
 
+  void _showErrorAlert(String message) {
+    QuickAlert.show(
+      context: context,
+      type: QuickAlertType.error,
+      title: 'Error',
+      text: message,
+      autoCloseDuration: const Duration(seconds: 2),
+      showConfirmBtn: false,
+    );
+  }
+
   Future<bool> _onWillPop() async {
     Navigator.of(context).pushReplacementNamed('/user_identification');
-    return false; // Prevents the default behavior of popping the route
+    return false; // Previene el comportamiento predeterminado de retroceder en la ruta
   }
 
   @override
@@ -110,6 +131,7 @@ class _CreateIdentificationFormState extends State<CreateIdentificationForm> {
       onWillPop: _onWillPop,
       child: Scaffold(
         appBar: AppBar(
+          title: const Text('Crear Cédula de Estudiante'),
           backgroundColor: const Color.fromARGB(255, 255, 251, 251),
           leading: TextButton(
             onPressed: () {
@@ -125,116 +147,101 @@ class _CreateIdentificationFormState extends State<CreateIdentificationForm> {
         ),
         body: Container(
           color: const Color.fromARGB(255, 255, 251, 251),
-          child: Center(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding:
-                    const EdgeInsets.only(right: 16.0, left: 16.0, bottom: 60),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(height: 16), // Espacio añadido para mover la tarjeta hacia arriba
+                IdentificationCard(
+                  idNumber: idNumberController.text,
+                  holderName: holderNameController.text,
+                  firstLastname: firstLastnameController.text,
+                  secondLastname: secondLastnameController.text,
+                  idBackgroundImageAssetPath: "assets/images/card_bg.png",
+                  logoAssetPath: "assets/images/bandera-costarica.png",
+                  profileImageAssetPath: "assets/images/perfilcedula.jpeg",
+                ),
+                const SizedBox(height: 16), // Reducido el espacio entre elementos
+                Container(
+                  width: double.infinity, // Ancho máximo
+                  alignment: Alignment.center,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TextFieldIdentificationWidget(
+                        label: 'Número de identificación',
+                        text: idNumberController.text,
+                        onChanged: (text) {
+                          setState(() {
+                            idNumberController.text = text;
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 10),
+                      TextFieldIdentificationWidget(
+                        label: 'Nombre completo',
+                        text: holderNameController.text,
+                        onChanged: (text) {
+                          setState(() {
+                            holderNameController.text = text;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Row(
                   children: [
-                    Container(
-                      alignment: Alignment.centerLeft,
-                      child: const Text(
-                        "Crear Cédula",
-                        style: TextStyle(
-                          fontSize: 26,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
+                    Expanded(
+                      child: TextFieldIdentificationWidget(
+                        label: 'Primer apellido',
+                        text: firstLastnameController.text,
+                        onChanged: (text) {
+                          setState(() {
+                            firstLastnameController.text = text;
+                          });
+                        },
                       ),
                     ),
-                    const SizedBox(height: 30),
-                    IdentificationCard(
-                      idNumber: idNumberController.text,
-                      holderName: holderNameController.text,
-                      firstLastname: firstLastnameController.text,
-                      secondLastname: secondLastnameController.text,
-                      idBackgroundImageAssetPath: "assets/images/card_bg.png",
-                      logoAssetPath: "assets/images/bandera-costarica.png",
-                      profileImageAssetPath: "assets/images/perfilcedula.jpeg",
-                    ),
-                    const SizedBox(height: 30),
-                    TextFieldIdentificationWidget(
-                      label: 'Número de identificación',
-                      text: idNumberController.text,
-                      onChanged: (text) {
-                        setState(() {
-                          idNumberController.text = text;
-                        });
-                      },
-                      prefixIcon: Icons.credit_card,
-                    ),
-                    const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TextFieldIdentificationWidget(
-                            label: 'Nombre completo',
-                            text: holderNameController.text,
-                            onChanged: (text) {
-                              setState(() {
-                                holderNameController.text = text;
-                              });
-                            },
-                            prefixIcon: Icons.account_circle,
-                          ),
-                        ),
-                        const SizedBox(width: 16), // Espacio entre los campos
-                        Expanded(
-                          child: TextFieldIdentificationWidget(
-                            label: 'Primer apellido',
-                            text: firstLastnameController.text,
-                            onChanged: (text) {
-                              setState(() {
-                                firstLastnameController.text = text;
-                              });
-                            },
-                            prefixIcon: Icons.person,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    TextFieldIdentificationWidget(
-                      label: 'Segundo apellido',
-                      text: secondLastnameController.text,
-                      onChanged: (text) {
-                        setState(() {
-                          secondLastnameController.text = text;
-                        });
-                      },
-                      prefixIcon: Icons.person_2,
-                    ),
-                    const SizedBox(height: 16),
-                    SizedBox(
-                      width: double.infinity,
-                      child: Center(
-                        child: ElevatedButton(
-                          onPressed: _saveDataToFirestore,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.black,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                          child: const Padding(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 16, horizontal: 80),
-                            child: Text(
-                              'Crear Identificación',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                              ),
-                            ),
-                          ),
-                        ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: TextFieldIdentificationWidget(
+                        label: 'Segundo apellido',
+                        text: secondLastnameController.text,
+                        onChanged: (text) {
+                          setState(() {
+                            secondLastnameController.text = text;
+                          });
+                        },
                       ),
                     ),
                   ],
                 ),
-              ),
+                const SizedBox(height: 20),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: _saveDataToFirestore,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.black,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                    ),
+                    child: const Text(
+                      'Crear Identificación',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ),

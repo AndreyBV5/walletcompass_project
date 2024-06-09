@@ -1,3 +1,4 @@
+import 'package:copia_walletfirebase/modules_pages/create_carnet.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -66,6 +67,11 @@ class _BottomNavigationBarState extends State<BottomNavigationBarApp> {
       if (_selectedIndex == 1) {
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => const FormCreditCard(),
+        ));
+      }
+      if (_selectedIndex == 2) {
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => const CreateCarnetForm(),
         ));
       }
     });
