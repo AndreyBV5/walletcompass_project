@@ -33,58 +33,68 @@ class _CreateCarnetFormState extends State<CreateCarnetForm> {
   }
 
   Future<void> _saveDataToFirestore() async {
-    try {
-      final User? user = _auth.currentUser;
-      if (user == null) {
-        // Si no hay usuario autenticado, salir del método
-        return;
-      }
-
-      final tarjetasCarnetRef =
-          _firestore.collection('PerfilPrueba').doc(user.uid);
-
-      // Obtener los datos actuales de TarjetaCarnet o un mapa vacío si no existe
-      final DocumentSnapshot documentSnapshot = await tarjetasCarnetRef.get();
-      final Map<String, dynamic> userData =
-          documentSnapshot.data() as Map<String, dynamic>? ?? {};
-      final Map<String, dynamic> tarjetasCarnetData =
-          userData['TarjetaCarnet'] as Map<String, dynamic>? ?? {};
-
-      // Determinar el nombre de la nueva tarjeta de carné
-      final int existingCount = tarjetasCarnetData.length;
-      final String newCarnetName = 'carnet${existingCount + 1}';
-
-      // Crear el mapa de datos para la nueva tarjeta de carné
-      final Map<String, dynamic> nuevaTarjetaCarnet = {
-        'numeroTarjeta': numeroTarjetaController.text,
-        'nombreTitular': nombreTitularController.text,
-        'apellidosTitular': apellidosTitularController.text,
-        'numeroCarnet': numeroCarnetController.text,
-        'fechaVencimiento': fechaVencimientoController.text,
-      };
-
-      // Agregar los datos de la nueva tarjeta de carné al mapa existente
-      tarjetasCarnetData[newCarnetName] = nuevaTarjetaCarnet;
-
-      // Actualizar solo el campo TarjetaCarnet con el nuevo mapa de TarjetaCarnet
-      await tarjetasCarnetRef.update({
-        'TarjetaCarnet': tarjetasCarnetData,
-      });
-
-      _showSuccessAlert();
-    } catch (e) {
-      print('Error al guardar los datos: $e');
-      _showErrorAlert('Se produjo un error al guardar los datos.');
+  try {
+    final User? user = _auth.currentUser;
+    if (user == null) {
+      // Si no hay usuario autenticado, mostrar una alerta de error
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Error: No se pudo obtener el usuario actual.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
     }
-  }
+    
+    final tarjetasCarnetRef = _firestore.collection('PerfilPrueba').doc(user.uid);
 
-  void _showSuccessAlert() {
-    // Muestra una alerta de éxito
-  }
+    // Obtener los datos actuales de TarjetaCarnet o un mapa vacío si no existe
+    final DocumentSnapshot documentSnapshot = await tarjetasCarnetRef.get();
+    final Map<String, dynamic> userData = documentSnapshot.data() as Map<String, dynamic>? ?? {};
+    final Map<String, dynamic> tarjetasCarnetData = userData['TarjetaCarnet'] as Map<String, dynamic>? ?? {};
 
-  void _showErrorAlert(String message) {
-    // Muestra una alerta de error
+    // Determinar el nombre de la nueva tarjeta de carné
+    final int existingCount = tarjetasCarnetData.length;
+    final String newCarnetName = 'carnet${existingCount + 1}';
+
+    // Crear el mapa de datos para la nueva tarjeta de carné
+    final Map<String, dynamic> nuevaTarjetaCarnet = {
+      'numeroTarjeta': numeroTarjetaController.text,
+      'nombreTitular': nombreTitularController.text,
+      'apellidosTitular': apellidosTitularController.text,
+      'numeroCarnet': numeroCarnetController.text,
+      'fechaVencimiento': fechaVencimientoController.text,
+    };
+
+    // Agregar los datos de la nueva tarjeta de carné al mapa existente
+    tarjetasCarnetData[newCarnetName] = nuevaTarjetaCarnet;
+
+    // Actualizar solo el campo TarjetaCarnet con el nuevo mapa de TarjetaCarnet
+    await tarjetasCarnetRef.update({
+      'TarjetaCarnet': tarjetasCarnetData,
+    });
+
+    // Mostrar una alerta de éxito
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Datos de carné insertados correctamente.'),
+        backgroundColor: Colors.green,
+      ),
+    );
+
+    // Navegar a la pantalla de identificación
+    Navigator.of(context).pushReplacementNamed('/user_identification');
+  } catch (e) {
+    // Mostrar una alerta de error si ocurre un error al guardar los datos
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Error al insertar datos de carné: $e'),
+        backgroundColor: Colors.red,
+      ),
+    );
   }
+}
+
 
   Future<bool> _onWillPop() async {
     Navigator.of(context).pushReplacementNamed('/view_carnet');
