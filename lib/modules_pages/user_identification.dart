@@ -1,4 +1,5 @@
 import 'package:copia_walletfirebase/modules_pages/some_components/botton_navigator_component_identification.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:copia_walletfirebase/model/identification_card.dart';
@@ -30,14 +31,31 @@ class _IdentificationState extends State<Identification> {
   }
 
   void _fetchDocuments() async {
-    FirebaseFirestore.instance
-        .collection('PerfilPrueba')
-        .get()
-        .then((snapshot) {
-      setState(() {
-        idDocuments = snapshot.docs;
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      FirebaseFirestore.instance
+          .collection('PerfilPrueba')
+          .doc(user.uid) // Obtén el documento específico del usuario actual
+          .get()
+          .then((snapshot) {
+        if (snapshot.exists) {
+          setState(() {
+            final data = snapshot.data() as Map<String, dynamic>?;
+
+            if (data != null) {
+              final tarjetasCedula =
+                  data['TarjetasCedula'] as Map<String, dynamic>?;
+
+              if (tarjetasCedula != null) {
+                idDocuments = [
+                  snapshot
+                ]; // Agrega el documento del usuario actual a la lista
+              }
+            }
+          });
+        }
       });
-    });
+    }
   }
 
   void _showEditDialog(

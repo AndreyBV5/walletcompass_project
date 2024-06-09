@@ -1,46 +1,54 @@
-import 'package:copia_walletfirebase/modules_pages/user_carnet.dart';
+import 'package:copia_walletfirebase/modules_pages/some_components/form_creditcard_component.dart';
 import 'package:flutter/material.dart';
 
-class BottomNavigationBarApp extends StatefulWidget {
-  const BottomNavigationBarApp({super.key});
+class BottomNavigationCarnet extends StatefulWidget {
+  const BottomNavigationCarnet({super.key});
 
   @override
-  State<BottomNavigationBarApp> createState() => _BottomNavigationBarState();
+  State<BottomNavigationCarnet> createState() => _BottomNavigationBarState();
 }
 
-class _BottomNavigationBarState extends State<BottomNavigationBarApp> {
-  int _selectedIndex = 1; // Índice seleccionado
+class _BottomNavigationBarState extends State<BottomNavigationCarnet> {
+  final int _selectedIndex = 1; // Índice seleccionado
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  // Handler para cuando se selecciona un ítem en el BottomNavigationBar
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-
-      if (_selectedIndex == 0) {
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => const Carnet(),
-        ));
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) => BottomNavigationBar(
-        backgroundColor: Colors.white,
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.credit_card_rounded,
-                color: _selectedIndex == 2 ? Colors.deepPurple : Colors.grey),
-            label: 'Crear Carné',
+  Widget build(BuildContext context) {
+    return BottomAppBar(
+      color: Colors.white,
+      height: 84,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment
+            .spaceEvenly, // Ajusta este valor según tus necesidades
+        children: <Widget>[
+          IconButton(
+            onPressed: () {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) => const FormCreditCard(),
+                ),
+              );
+            },
+            icon: Column(
+              children: [
+                Icon(
+                  Icons.portrait_rounded,
+                  color: _selectedIndex == 0
+                      ? Colors.deepPurple
+                      : Colors.deepPurple,
+                ),
+                Text(
+                  "Crear Identificación",
+                  style: TextStyle(
+                    color: _selectedIndex == 0
+                        ? Colors.deepPurple
+                        : const Color.fromARGB(255, 0, 0, 0),
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
-        selectedItemColor: Colors.deepPurple,
-        currentIndex: _selectedIndex, // Índice seleccionado
-        onTap: _onItemTapped, // Handler onTap para los ítems
-      );
+      ),
+    );
+  }
 }
