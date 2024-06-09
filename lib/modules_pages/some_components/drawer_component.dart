@@ -1,4 +1,4 @@
-import 'package:copia_walletfirebase/modules_pages/home.dart';
+import 'package:copia_walletfirebase/modules_pages/user_tarjet_credit.dart';
 import 'package:copia_walletfirebase/modules_pages/user_carnet.dart';
 import 'package:copia_walletfirebase/modules_pages/user_identification.dart';
 import 'package:flutter/material.dart';
@@ -90,7 +90,7 @@ class _NavigationDrawerComponentState extends State<NavigationDrawerComponent> {
                 ));
               },
             ),
-             ListTile(
+            ListTile(
               leading: const Icon(Icons.credit_card),
               title: const Text("Ver Carnet Estudiantil"),
               onTap: () {

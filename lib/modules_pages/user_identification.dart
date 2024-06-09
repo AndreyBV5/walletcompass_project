@@ -1,3 +1,4 @@
+import 'package:copia_walletfirebase/modules_pages/some_components/botton_navigator_component_identification.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:copia_walletfirebase/model/identification_card.dart';

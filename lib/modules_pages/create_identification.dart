@@ -100,7 +100,7 @@ class _CreateIdentificationFormState extends State<CreateIdentificationForm> {
   }
 
   Future<bool> _onWillPop() async {
-    Navigator.of(context).pushReplacementNamed('/home');
+    Navigator.of(context).pushReplacementNamed('/user_identification');
     return false; // Prevents the default behavior of popping the route
   }
 

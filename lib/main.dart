@@ -1,7 +1,8 @@
 import 'package:copia_walletfirebase/firebase_options.dart';
 import 'package:copia_walletfirebase/login_and_register/login.dart';
 import 'package:copia_walletfirebase/login_and_register/register.dart';
-import 'package:copia_walletfirebase/modules_pages/home.dart';
+import 'package:copia_walletfirebase/modules_pages/some_components/introduction_page.dart';
+import 'package:copia_walletfirebase/modules_pages/user_identification.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -31,7 +32,8 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const Login(),
         '/register': (context) => const Register(),
-        '/home': (context) => const Home()
+        '/home': (context) => const IntroductionPage(),
+        '/user_identification': (context) => const Identification()
       },
     );
   }
