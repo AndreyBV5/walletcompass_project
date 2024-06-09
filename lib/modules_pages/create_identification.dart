@@ -8,10 +8,12 @@ import 'package:copia_walletfirebase/modules_pages/some_components/textfield_ide
 class CreateIdentificationForm extends StatefulWidget {
   final String documentId;
 
-  const CreateIdentificationForm({Key? key, required this.documentId}) : super(key: key);
+  const CreateIdentificationForm({Key? key, required this.documentId})
+      : super(key: key);
 
   @override
-  State<CreateIdentificationForm> createState() => _CreateIdentificationFormState(documentId);
+  State<CreateIdentificationForm> createState() =>
+      _CreateIdentificationFormState(documentId);
 }
 
 class _CreateIdentificationFormState extends State<CreateIdentificationForm> {
@@ -105,7 +107,7 @@ class _CreateIdentificationFormState extends State<CreateIdentificationForm> {
     );
 
     Future.delayed(const Duration(seconds: 2), () {
-      Navigator.of(context).pushReplacementNamed('/home');
+      Navigator.of(context).pushReplacementNamed('/user_identification');
     });
   }
 
@@ -135,7 +137,8 @@ class _CreateIdentificationFormState extends State<CreateIdentificationForm> {
           backgroundColor: const Color.fromARGB(255, 255, 251, 251),
           leading: TextButton(
             onPressed: () {
-              Navigator.of(context).pushReplacementNamed('/home');
+              Navigator.of(context)
+                  .pushReplacementNamed('/user_identification');
             },
             child: const Row(
               children: [
@@ -153,7 +156,9 @@ class _CreateIdentificationFormState extends State<CreateIdentificationForm> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const SizedBox(height: 16), // Espacio añadido para mover la tarjeta hacia arriba
+                const SizedBox(
+                    height:
+                        16), // Espacio añadido para mover la tarjeta hacia arriba
                 IdentificationCard(
                   idNumber: idNumberController.text,
                   holderName: holderNameController.text,
@@ -163,7 +168,8 @@ class _CreateIdentificationFormState extends State<CreateIdentificationForm> {
                   logoAssetPath: "assets/images/bandera-costarica.png",
                   profileImageAssetPath: "",
                 ),
-                const SizedBox(height: 16), // Reducido el espacio entre elementos
+                const SizedBox(
+                    height: 16), // Reducido el espacio entre elementos
                 Container(
                   width: double.infinity, // Ancho máximo
                   alignment: Alignment.center,
