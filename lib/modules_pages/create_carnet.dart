@@ -1,8 +1,10 @@
 import 'package:copia_walletfirebase/model/carnet_card.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CreateCarnetForm extends StatefulWidget {
-  const CreateCarnetForm({super.key});
+  const CreateCarnetForm({Key? key});
 
   @override
   State<CreateCarnetForm> createState() => _CreateCarnetFormState();
@@ -11,9 +13,14 @@ class CreateCarnetForm extends StatefulWidget {
 class _CreateCarnetFormState extends State<CreateCarnetForm> {
   final TextEditingController numeroTarjetaController = TextEditingController();
   final TextEditingController nombreTitularController = TextEditingController();
-  final TextEditingController apellidosTitularController = TextEditingController();
+  final TextEditingController apellidosTitularController =
+      TextEditingController();
   final TextEditingController numeroCarnetController = TextEditingController();
-  final TextEditingController fechaVencimientoController = TextEditingController();
+  final TextEditingController fechaVencimientoController =
+      TextEditingController();
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override
   void dispose() {
@@ -23,6 +30,58 @@ class _CreateCarnetFormState extends State<CreateCarnetForm> {
     numeroCarnetController.dispose();
     fechaVencimientoController.dispose();
     super.dispose();
+  }
+
+  Future<void> _saveDataToFirestore() async {
+  try {
+    final User? user = _auth.currentUser;
+    if (user == null) {
+      // Si no hay usuario autenticado, salir del método
+      return;
+    }
+    
+    final tarjetasCarnetRef = _firestore.collection('PerfilPrueba').doc(user.uid);
+
+    // Obtener los datos actuales de TarjetaCarnet o un mapa vacío si no existe
+    final DocumentSnapshot documentSnapshot = await tarjetasCarnetRef.get();
+    final Map<String, dynamic> userData = documentSnapshot.data() as Map<String, dynamic>? ?? {};
+    final Map<String, dynamic> tarjetasCarnetData = userData['TarjetaCarnet'] as Map<String, dynamic>? ?? {};
+
+    // Determinar el nombre de la nueva tarjeta de carné
+    final int existingCount = tarjetasCarnetData.length;
+    final String newCarnetName = 'carnet${existingCount + 1}';
+
+    // Crear el mapa de datos para la nueva tarjeta de carné
+    final Map<String, dynamic> nuevaTarjetaCarnet = {
+      'numeroTarjeta': numeroTarjetaController.text,
+      'nombreTitular': nombreTitularController.text,
+      'apellidosTitular': apellidosTitularController.text,
+      'numeroCarnet': numeroCarnetController.text,
+      'fechaVencimiento': fechaVencimientoController.text,
+    };
+
+    // Agregar los datos de la nueva tarjeta de carné al mapa existente
+    tarjetasCarnetData[newCarnetName] = nuevaTarjetaCarnet;
+
+    // Actualizar solo el campo TarjetaCarnet con el nuevo mapa de TarjetaCarnet
+    await tarjetasCarnetRef.update({
+      'TarjetaCarnet': tarjetasCarnetData,
+    });
+
+    _showSuccessAlert();
+  } catch (e) {
+    print('Error al guardar los datos: $e');
+    _showErrorAlert('Se produjo un error al guardar los datos.');
+  }
+}
+
+
+  void _showSuccessAlert() {
+    // Muestra una alerta de éxito
+  }
+
+  void _showErrorAlert(String message) {
+    // Muestra una alerta de error
   }
 
   @override
@@ -46,9 +105,10 @@ class _CreateCarnetFormState extends State<CreateCarnetForm> {
             TextField(
               controller: numeroTarjetaController,
               decoration: const InputDecoration(
-                labelText: 'Número de Cédula',
+                labelText: 'Número de Tarjeta',
                 border: OutlineInputBorder(),
-                contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 10, horizontal: 10),
               ),
               onChanged: (text) => setState(() {}),
             ),
@@ -61,7 +121,8 @@ class _CreateCarnetFormState extends State<CreateCarnetForm> {
                     decoration: const InputDecoration(
                       labelText: 'Nombre del Titular',
                       border: OutlineInputBorder(),
-                      contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                     ),
                     onChanged: (text) => setState(() {}),
                   ),
@@ -73,7 +134,8 @@ class _CreateCarnetFormState extends State<CreateCarnetForm> {
                     decoration: const InputDecoration(
                       labelText: 'Apellidos del Titular',
                       border: OutlineInputBorder(),
-                      contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                     ),
                     onChanged: (text) => setState(() {}),
                   ),
@@ -86,7 +148,8 @@ class _CreateCarnetFormState extends State<CreateCarnetForm> {
               decoration: const InputDecoration(
                 labelText: 'Número de Carnet',
                 border: OutlineInputBorder(),
-                contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 10, horizontal: 10),
               ),
               onChanged: (text) => setState(() {}),
             ),
@@ -96,7 +159,8 @@ class _CreateCarnetFormState extends State<CreateCarnetForm> {
               decoration: const InputDecoration(
                 labelText: 'Fecha de Vencimiento',
                 border: OutlineInputBorder(),
-                contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: 10, horizontal: 10),
               ),
               onChanged: (text) => setState(() {}),
             ),
@@ -108,12 +172,11 @@ class _CreateCarnetFormState extends State<CreateCarnetForm> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.black, // Color de fondo negro
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5), // Bordes redondeados con radio de 10
+                    borderRadius: BorderRadius.circular(
+                        5), // Bordes redondeados con radio de 10
                   ),
                 ),
-                onPressed: () {
-                  // Lógica para crear el carné aquí
-                },
+                onPressed: _saveDataToFirestore,
                 child: const Text(
                   'Crear Carné',
                   style: TextStyle(
