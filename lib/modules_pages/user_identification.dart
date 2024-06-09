@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:copia_walletfirebase/model/identification_card.dart';
 import 'package:copia_walletfirebase/modules_pages/some_components/drawer_component.dart';
+import 'package:stacked_card_carousel/stacked_card_carousel.dart';
 
 class Identification extends StatefulWidget {
   const Identification({super.key});
@@ -18,7 +19,7 @@ class _IdentificationState extends State<Identification> {
   void initState() {
     super.initState();
     pageController = PageController();
-    _loadDataFromFirestore();
+    _fetchDocuments();
   }
 
   @override
@@ -27,17 +28,15 @@ class _IdentificationState extends State<Identification> {
     super.dispose();
   }
 
-  Future<void> _loadDataFromFirestore() async {
-    try {
-      var querySnapshot =
-          await FirebaseFirestore.instance.collection('TarjetaCedula').get();
-
+  void _fetchDocuments() async {
+    FirebaseFirestore.instance
+        .collection('PerfilPrueba')
+        .get()
+        .then((snapshot) {
       setState(() {
-        idDocuments = querySnapshot.docs;
+        idDocuments = snapshot.docs;
       });
-    } catch (e) {
-      print('Error al cargar los datos: $e');
-    }
+    });
   }
 
   void _showEditDialog(DocumentSnapshot doc) {
@@ -99,7 +98,7 @@ class _IdentificationState extends State<Identification> {
                       .delete();
                   // Actualiza los datos en la UI
                   setState(() {
-                    _loadDataFromFirestore();
+                    _fetchDocuments();
                   });
                   Navigator.of(context).pop();
                 } catch (e) {
@@ -124,7 +123,7 @@ class _IdentificationState extends State<Identification> {
                   });
                   // Actualiza los datos en la UI
                   setState(() {
-                    _loadDataFromFirestore();
+                    _fetchDocuments();
                   });
                   Navigator.of(context).pop();
                 } catch (e) {
@@ -147,28 +146,46 @@ class _IdentificationState extends State<Identification> {
       drawer: const NavigationDrawerComponent(),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: ListView.builder(
-          itemCount: idDocuments.length,
-          itemBuilder: (context, index) {
-            final doc = idDocuments[index];
-            final data = doc.data() as Map<String, dynamic>;
-            return GestureDetector(
-              onTap: () => _showEditDialog(doc),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: IdentificationCard(
-                  idNumber: data['numeroCedula'].toString(),
-                  holderName: data['nombreCompleto'],
-                  firstLastname: data['primerApellido'],
-                  secondLastname: data['segundoApellido'],
-                  idBackgroundImageAssetPath: "assets/images/card_bg.png",
-                  logoAssetPath: "assets/images/bandera-costarica.png",
-                  profileImageAssetPath: "assets/images/perfilcedula.jpeg",
-                ),
+        child: idDocuments.isEmpty
+            ? const Center(child: CircularProgressIndicator())
+            : StackedCardCarousel(
+                spaceBetweenItems: 260,
+                items: idDocuments.expand<Widget>((doc) {
+                  final data = doc.data() as Map<String, dynamic>?;
+
+                  if (data == null) {
+                    return []; // Maneja el caso donde data es null
+                  }
+
+                  final tarjetasCedula =
+                      data['TarjetasCedula'] as Map<String, dynamic>?;
+                  if (tarjetasCedula == null) {
+                    return []; // Maneja el caso donde TarjetasCedula es null
+                  }
+
+                  // Extraer todas las cédulas
+                  return tarjetasCedula.entries.map<Widget>((entry) {
+                    final cedula = entry.value as Map<String, dynamic>;
+                    return GestureDetector(
+                      onTap: () => _showEditDialog(doc),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: IdentificationCard(
+                          idNumber: cedula['numeroCedula'].toString(),
+                          holderName: cedula['nombreCompleto'],
+                          firstLastname: cedula['primerApellido'],
+                          secondLastname: cedula['segundoApellido'],
+                          idBackgroundImageAssetPath:
+                              "assets/images/card_bg.png",
+                          logoAssetPath: "assets/images/bandera-costarica.png",
+                          profileImageAssetPath:
+                              "assets/images/perfilcedula.jpeg",
+                        ),
+                      ),
+                    );
+                  }).toList();
+                }).toList(),
               ),
-            );
-          },
-        ),
       ),
     );
   }
