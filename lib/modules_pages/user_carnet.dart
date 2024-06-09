@@ -114,7 +114,7 @@ class _CarnetState extends State<Carnet> with SingleTickerProviderStateMixin {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Confirmación'),
+          title: const Text('Eliminar Carné'),
           content: const Text('¿Está seguro de que desea eliminar este carné?'),
           actions: [
             TextButton(

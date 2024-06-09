@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:copia_walletfirebase/model/identification_card.dart';
-import 'package:quickalert/quickalert.dart';
 import 'package:copia_walletfirebase/modules_pages/some_components/textfield_identification_widget.dart';
 
 class CreateIdentificationForm extends StatefulWidget {
@@ -97,13 +96,11 @@ class _CreateIdentificationFormState extends State<CreateIdentificationForm> {
   }
 
   void _showSuccessAlert() {
-    QuickAlert.show(
-      context: context,
-      type: QuickAlertType.success,
-      title: 'Éxito',
-      text: 'Identificación creada correctamente',
-      autoCloseDuration: const Duration(seconds: 2),
-      showConfirmBtn: false,
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Datos de identificación insertados correctamente.'),
+        backgroundColor: Colors.green,
+      ),
     );
 
     Future.delayed(const Duration(seconds: 2), () {
@@ -112,13 +109,11 @@ class _CreateIdentificationFormState extends State<CreateIdentificationForm> {
   }
 
   void _showErrorAlert(String message) {
-    QuickAlert.show(
-      context: context,
-      type: QuickAlertType.error,
-      title: 'Error',
-      text: message,
-      autoCloseDuration: const Duration(seconds: 2),
-      showConfirmBtn: false,
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
+      ),
     );
   }
 

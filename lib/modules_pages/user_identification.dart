@@ -35,7 +35,7 @@ class _IdentificationState extends State<Identification> {
     if (user != null) {
       FirebaseFirestore.instance
           .collection('PerfilPrueba')
-          .doc(user.uid) // Obtén el documento específico del usuario actual
+          .doc(user.uid)
           .get()
           .then((snapshot) {
         if (snapshot.exists) {
@@ -43,13 +43,10 @@ class _IdentificationState extends State<Identification> {
             final data = snapshot.data() as Map<String, dynamic>?;
 
             if (data != null) {
-              final tarjetasCedula =
-                  data['TarjetasCedula'] as Map<String, dynamic>?;
+              final tarjetasCedula = data['TarjetasCedula'] as Map<String, dynamic>?;
 
               if (tarjetasCedula != null) {
-                idDocuments = [
-                  snapshot
-                ]; // Agrega el documento del usuario actual a la lista
+                idDocuments = [snapshot];
               }
             }
           });
@@ -58,48 +55,14 @@ class _IdentificationState extends State<Identification> {
     }
   }
 
-  void _showEditDialog(
+  void _showDeleteDialog(
       DocumentSnapshot doc, String cedulaKey, Map<String, dynamic> cedulaData) {
-    final idNumberController =
-        TextEditingController(text: cedulaData['numeroCedula'].toString());
-    final holderNameController =
-        TextEditingController(text: cedulaData['nombreCompleto']);
-    final firstLastnameController =
-        TextEditingController(text: cedulaData['primerApellido']);
-    final secondLastnameController =
-        TextEditingController(text: cedulaData['segundoApellido']);
-
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Editar Identificación'),
-          content: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextField(
-                  controller: idNumberController,
-                  decoration: const InputDecoration(labelText: 'Cédula'),
-                ),
-                TextField(
-                  controller: holderNameController,
-                  decoration:
-                      const InputDecoration(labelText: 'Nombre Completo'),
-                ),
-                TextField(
-                  controller: firstLastnameController,
-                  decoration:
-                      const InputDecoration(labelText: 'Primer Apellido'),
-                ),
-                TextField(
-                  controller: secondLastnameController,
-                  decoration:
-                      const InputDecoration(labelText: 'Segundo Apellido'),
-                ),
-              ],
-            ),
-          ),
+          title: const Text('Eliminar Identificación'),
+          content: const Text('¿Está seguro de que desea eliminar esta identificación?'),
           actions: [
             TextButton(
               onPressed: () {
@@ -109,7 +72,6 @@ class _IdentificationState extends State<Identification> {
             ),
             TextButton(
               onPressed: () async {
-                // Elimina la cédula específica en Firestore y actualiza las restantes
                 try {
                   await FirebaseFirestore.instance
                       .runTransaction((transaction) async {
@@ -122,12 +84,10 @@ class _IdentificationState extends State<Identification> {
                           Map<String, dynamic>.from(
                               data['TarjetasCedula'] ?? {});
 
-                      // Elimina la cédula específica del mapa
                       tarjetasCedula.remove(cedulaKey);
 
-                      // Actualiza los nombres de las cédulas restantes para mantenerlas en orden
                       List<String> keys = tarjetasCedula.keys.toList();
-                      keys.sort((a, b) => a.compareTo(b)); // Ordena las claves
+                      keys.sort((a, b) => a.compareTo(b));
                       Map<String, dynamic> nuevasCedulas = {};
                       for (int i = 0; i < keys.length; i++) {
                         String oldKey = keys[i];
@@ -135,50 +95,35 @@ class _IdentificationState extends State<Identification> {
                         nuevasCedulas[newKey] = tarjetasCedula[oldKey];
                       }
 
-                      // Actualiza el documento con el nuevo mapa de TarjetasCedula
                       transaction.update(
                           doc.reference, {'TarjetasCedula': nuevasCedulas});
                     }
                   });
 
-                  // Actualiza los datos en la UI
                   setState(() {
                     _fetchDocuments();
                   });
                   Navigator.of(context).pop();
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Identificación eliminada correctamente.'),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
                 } catch (e) {
                   print('Error al eliminar los datos: $e');
-                }
-              },
-              child:
-                  const Text('Eliminar', style: TextStyle(color: Colors.red)),
-            ),
-            TextButton(
-              onPressed: () async {
-                // Actualiza los datos de la cédula específica en Firestore
-                try {
-                  await FirebaseFirestore.instance
-                      .collection('PerfilPrueba')
-                      .doc(doc.id)
-                      .update({
-                    'TarjetasCedula.$cedulaKey': {
-                      'numeroCedula': idNumberController.text,
-                      'nombreCompleto': holderNameController.text,
-                      'primerApellido': firstLastnameController.text,
-                      'segundoApellido': secondLastnameController.text,
-                    }
-                  });
-                  // Actualiza los datos en la UI
-                  setState(() {
-                    _fetchDocuments();
-                  });
                   Navigator.of(context).pop();
-                } catch (e) {
-                  print('Error al actualizar los datos: $e');
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Error al eliminar la identificación: $e'),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
                 }
               },
-              child:
-                  const Text('Guardar', style: TextStyle(color: Colors.green)),
+              child: const Text('Eliminar'),
             ),
           ],
         );
@@ -187,7 +132,6 @@ class _IdentificationState extends State<Identification> {
   }
 
   Future<bool> _onWillPop() async {
-    // Aquí puedes agregar la lógica para volver a la pantalla de inicio
     Navigator.of(context).pushReplacementNamed('/');
     return false;
   }
@@ -203,46 +147,63 @@ class _IdentificationState extends State<Identification> {
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: idDocuments.isEmpty
-              ? const Center(child: CircularProgressIndicator())
-              : StackedCardCarousel(
-                  spaceBetweenItems: 260,
-                  items: idDocuments.expand<Widget>((doc) {
-                    final data = doc.data() as Map<String, dynamic>?;
+              ? const Center(
+                  child: Text(
+                    'No hay cédulas disponibles',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                )
+              : Builder(
+                  builder: (context) {
+                    final List<Widget> items = idDocuments.expand<Widget>((doc) {
+                      final data = doc.data() as Map<String, dynamic>?;
 
-                    if (data == null) {
-                      return []; // Maneja el caso donde data es null
-                    }
+                      if (data == null) {
+                        return [];
+                      }
 
-                    final tarjetasCedula =
-                        data['TarjetasCedula'] as Map<String, dynamic>?;
-                    if (tarjetasCedula == null) {
-                      return []; // Maneja el caso donde TarjetasCedula es null
-                    }
+                      final tarjetasCedula =
+                          data['TarjetasCedula'] as Map<String, dynamic>?;
+                      if (tarjetasCedula == null) {
+                        return [];
+                      }
 
-                    // Extraer todas las cédulas
-                    return tarjetasCedula.entries.map<Widget>((entry) {
-                      final cedulaKey = entry.key;
-                      final cedula = entry.value as Map<String, dynamic>;
-                      return GestureDetector(
-                        onTap: () => _showEditDialog(doc, cedulaKey, cedula),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          child: IdentificationCard(
-                            idNumber: cedula['numeroCedula'].toString(),
-                            holderName: cedula['nombreCompleto'],
-                            firstLastname: cedula['primerApellido'],
-                            secondLastname: cedula['segundoApellido'],
-                            idBackgroundImageAssetPath:
-                                "assets/images/card_bg.png",
-                            logoAssetPath:
-                                "assets/images/bandera-costarica.png",
-                            profileImageAssetPath:
-                                "assets/images/perfilcedula.jpeg",
+                      return tarjetasCedula.entries.map<Widget>((entry) {
+                        final cedulaKey = entry.key;
+                        final cedula = entry.value as Map<String, dynamic>;
+                        return GestureDetector(
+                          onTap: () => _showDeleteDialog(doc, cedulaKey, cedula),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: IdentificationCard(
+                              idNumber: cedula['numeroCedula'].toString(),
+                              holderName: cedula['nombreCompleto'],
+                              firstLastname: cedula['primerApellido'],
+                              secondLastname: cedula['segundoApellido'],
+                              idBackgroundImageAssetPath:
+                                  "assets/images/card_bg.png",
+                              logoAssetPath:
+                                  "assets/images/bandera-costarica.png",
+                              profileImageAssetPath:
+                                  "assets/images/perfilcedula.jpeg",
+                            ),
                           ),
-                        ),
-                      );
+                        );
+                      }).toList();
                     }).toList();
-                  }).toList(),
+
+                    return items.isEmpty
+                        ? const Center(
+                            child: Text(
+                              'No hay cédulas disponibles',
+                              style: TextStyle(fontSize: 18),
+                            ),
+                          )
+                        : StackedCardCarousel(
+                            spaceBetweenItems: 260,
+                            items: items,
+                          );
+                  },
                 ),
         ),
       ),
