@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
 class IdentificationCard extends StatelessWidget {
-  
   const IdentificationCard({
-    super.key,
+    Key? key,
     required this.idNumber,
     required this.holderName,
     required this.firstLastname,
@@ -11,7 +10,7 @@ class IdentificationCard extends StatelessWidget {
     required this.idBackgroundImageAssetPath,
     required this.logoAssetPath,
     this.profileImageAssetPath,
-  });
+  }) : super(key: key);
 
   final String idNumber;
   final String holderName;
@@ -37,22 +36,28 @@ class IdentificationCard extends StatelessWidget {
         padding: const EdgeInsets.all(20),
         child: Stack(
           children: [
-            if (profileImageAssetPath != null)
-              Positioned(
-                bottom: 110,
-                right: 5,
-                child: Container(
-                  width: 90, // Tamaño de la imagen de perfil
-                  height: 100, // Tamaño de la imagen de perfil
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    image: DecorationImage(
-                      image: AssetImage(profileImageAssetPath!),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
+            // Resto del contenido
+            Positioned(
+              bottom: 110,
+              right: 5,
+              child: Container(
+                width: 90, // Tamaño de la imagen de perfil
+                height: 100, // Tamaño de la imagen de perfil
+                decoration: BoxDecoration(
+                  color: Colors.white, // Establece el color de fondo blanco
+                  borderRadius: BorderRadius.circular(10),
                 ),
+                child: profileImageAssetPath == null
+                    ? const Center(
+                        child: Icon(
+                          Icons.person,
+                          color: Colors.black,
+                          size: 40,
+                        ),
+                      )
+                    : null,
               ),
+            ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

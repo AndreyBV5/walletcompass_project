@@ -161,7 +161,7 @@ class _CreateIdentificationFormState extends State<CreateIdentificationForm> {
                   secondLastname: secondLastnameController.text,
                   idBackgroundImageAssetPath: "assets/images/card_bg.png",
                   logoAssetPath: "assets/images/bandera-costarica.png",
-                  profileImageAssetPath: "assets/images/perfilcedula.jpeg",
+                  profileImageAssetPath: "",
                 ),
                 const SizedBox(height: 16), // Reducido el espacio entre elementos
                 Container(
