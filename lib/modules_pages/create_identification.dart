@@ -95,7 +95,7 @@ class _CreateIdentificationFormState extends State<CreateIdentificationForm> {
     );
 
     Future.delayed(const Duration(seconds: 2), () {
-      Navigator.pop(context);
+      Navigator.of(context).pushReplacementNamed('/home');
     });
   }
 
