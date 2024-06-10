@@ -25,7 +25,7 @@ class MyListTile extends StatelessWidget {
           SlidableAction(
             onPressed: onEdithPressed,
             icon: Icons.edit_rounded,
-            backgroundColor: Colors.grey,
+            backgroundColor: Colors.green,
             foregroundColor: Colors.white,
             borderRadius: BorderRadius.circular(4),
           ),
@@ -41,7 +41,7 @@ class MyListTile extends StatelessWidget {
         ]),
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Color.fromARGB(255, 246, 247, 255),
             borderRadius: BorderRadius.circular(8),
             boxShadow: [
               BoxShadow(
