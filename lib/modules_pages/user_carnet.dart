@@ -58,89 +58,92 @@ class _CarnetState extends State<Carnet> with SingleTickerProviderStateMixin {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      drawer: const NavigationDrawerComponent(),
-      bottomNavigationBar: const BottomNavigationCarnet(),
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: cardDocuments.isEmpty
-            ? SingleChildScrollView(
-                child: Center(
-                  child: Container(
-                    margin: const EdgeInsets.only(
-                        top: 300), // Ajuste del margen superior
-                    child: Text(
-                      'No hay carnés disponibles',
-                      style: TextStyle(fontSize: 18, color: Colors.black),
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(),
+    drawer: const NavigationDrawerComponent(),
+    bottomNavigationBar: const BottomNavigationCarnet(),
+    body: Padding(
+      padding: const EdgeInsets.all(20),
+      child: cardDocuments.isEmpty
+          ? SingleChildScrollView(
+              child: Center(
+                child: Container(
+                  margin: const EdgeInsets.only(top: 300),
+                  child: const Text(
+                    'No hay carnés disponibles',
+                    style: TextStyle(
+                      fontSize: 14, // Tamaño de fuente fijo en 14
+                      color: Colors.black,
                     ),
                   ),
                 ),
-              )
-            : Builder(
-                builder: (context) {
-                  final List<Widget> items =
-                      cardDocuments.expand<Widget>((doc) {
-                    final data = doc.data() as Map<String, dynamic>?;
+              ),
+            )
+          : Builder(
+              builder: (context) {
+                final List<Widget> items =
+                    cardDocuments.expand<Widget>((doc) {
+                  final data = doc.data() as Map<String, dynamic>?;
 
-                    if (data == null) {
-                      return [];
-                    }
+                  if (data == null) {
+                    return [];
+                  }
 
-                    final tarjetasCarnet =
-                        data['TarjetaCarnet'] as Map<String, dynamic>?;
-                    if (tarjetasCarnet == null) {
-                      return [];
-                    }
+                  final tarjetasCarnet =
+                      data['TarjetaCarnet'] as Map<String, dynamic>?;
+                  if (tarjetasCarnet == null) {
+                    return [];
+                  }
 
-                    return tarjetasCarnet.entries.map<Widget>((entry) {
-                      final cardKey = entry.key;
-                      final cardData = entry.value as Map<String, dynamic>;
-                      return GestureDetector(
-                        onTap: () =>
-                            _showDeleteConfirmationDialog(doc, cardKey),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          child: CarnetEstudiante(
-                            numeroTarjeta: cardData['numeroTarjeta'].toString(),
-                            nombreTitular: cardData['nombreTitular'],
-                            apellidosTitular: cardData['apellidosTitular'],
-                            numeroCarnet: cardData['numeroCarnet'],
-                            fechaVencimiento: cardData['fechaVencimiento'],
-                          ),
+                  return tarjetasCarnet.entries.map<Widget>((entry) {
+                    final cardKey = entry.key;
+                    final cardData = entry.value as Map<String, dynamic>;
+                    return GestureDetector(
+                      onTap: () => _showDeleteConfirmationDialog(doc, cardKey),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: CarnetEstudiante(
+                          numeroTarjeta: cardData['numeroTarjeta'].toString(),
+                          nombreTitular: cardData['nombreTitular'],
+                          apellidosTitular: cardData['apellidosTitular'],
+                          numeroCarnet: cardData['numeroCarnet'],
+                          fechaVencimiento: cardData['fechaVencimiento'],
                         ),
-                      );
-                    }).toList();
+                      ),
+                    );
                   }).toList();
+                }).toList();
 
-                  return items.isEmpty
-                      ? SingleChildScrollView(
-                          child: Center(
-                            child: Container(
-                              margin: const EdgeInsets.only(
-                                  top: 300), // Ajuste del margen superior
-                              child: Text(
-                                'No hay carnés disponibles',
-                                style: TextStyle(
-                                    fontSize: 18, color: Colors.black),
+                return items.isEmpty
+                    ? SingleChildScrollView(
+                        child: Center(
+                          child: Container(
+                            margin: const EdgeInsets.only(top: 300),
+                            child: const Text(
+                              'No hay carnés disponibles',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.black,
                               ),
                             ),
                           ),
-                        )
-                      : StackedCardCarousel(
-                          spaceBetweenItems: 260,
-                          items: items,
-                          type: StackedCardCarouselType.cardsStack,
-                          onPageChanged: (index) {
-                            _currentIndexNotifier.value = index;
-                          },
-                        );
-                },
-              ),
-      ),
-    );
-  }
+                        ),
+                      )
+                    : StackedCardCarousel(
+                        spaceBetweenItems: 260,
+                        items: items,
+                        type: StackedCardCarouselType.cardsStack,
+                        onPageChanged: (index) {
+                          _currentIndexNotifier.value = index;
+                        },
+                      );
+              },
+            ),
+    ),
+  );
+}
+
 
   void _showDeleteConfirmationDialog(DocumentSnapshot doc, String cardKey) {
     showDialog(

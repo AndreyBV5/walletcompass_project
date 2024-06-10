@@ -137,76 +137,76 @@ class _IdentificationState extends State<Identification> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: _onWillPop,
-      child: Scaffold(
-        appBar: AppBar(),
-        drawer: const NavigationDrawerComponent(),
-        bottomNavigationBar: const BottomNavigationIdentification(),
-        body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: idDocuments.isEmpty
-              ? const Center(
-                  child: Text(
-                    'No hay cédulas disponibles',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                )
-              : Builder(
-                  builder: (context) {
-                    final List<Widget> items = idDocuments.expand<Widget>((doc) {
-                      final data = doc.data() as Map<String, dynamic>?;
-
-                      if (data == null) {
-                        return [];
-                      }
-
-                      final tarjetasCedula =
-                          data['TarjetasCedula'] as Map<String, dynamic>?;
-                      if (tarjetasCedula == null) {
-                        return [];
-                      }
-
-                      return tarjetasCedula.entries.map<Widget>((entry) {
-                        final cedulaKey = entry.key;
-                        final cedula = entry.value as Map<String, dynamic>;
-                        return GestureDetector(
-                          onTap: () => _showDeleteDialog(doc, cedulaKey, cedula),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8.0),
-                            child: IdentificationCard(
-                              idNumber: cedula['numeroCedula'].toString(),
-                              holderName: cedula['nombreCompleto'],
-                              firstLastname: cedula['primerApellido'],
-                              secondLastname: cedula['segundoApellido'],
-                              idBackgroundImageAssetPath:
-                                  "assets/images/card_bg.png",
-                              logoAssetPath:
-                                  "assets/images/bandera-costarica.png",
-                              profileImageAssetPath:
-                                  "assets/images/perfilcedula.jpeg",
-                            ),
-                          ),
-                        );
-                      }).toList();
-                    }).toList();
-
-                    return items.isEmpty
-                        ? const Center(
-                            child: Text(
-                              'No hay cédulas disponibles',
-                              style: TextStyle(fontSize: 18),
-                            ),
-                          )
-                        : StackedCardCarousel(
-                            spaceBetweenItems: 260,
-                            items: items,
-                          );
-                  },
+Widget build(BuildContext context) {
+  return WillPopScope(
+    onWillPop: _onWillPop,
+    child: Scaffold(
+      appBar: AppBar(),
+      drawer: const NavigationDrawerComponent(),
+      bottomNavigationBar: const BottomNavigationIdentification(),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: idDocuments.isEmpty
+            ? const Center(
+                child: Text(
+                  'No hay cédulas disponibles',
+                  style: TextStyle(fontSize: 14), // Tamaño de fuente ajustado a 14
                 ),
-        ),
+              )
+            : Builder(
+                builder: (context) {
+                  final List<Widget> items = idDocuments.expand<Widget>((doc) {
+                    final data = doc.data() as Map<String, dynamic>?;
+
+                    if (data == null) {
+                      return [];
+                    }
+
+                    final tarjetasCedula =
+                        data['TarjetasCedula'] as Map<String, dynamic>?;
+                    if (tarjetasCedula == null) {
+                      return [];
+                    }
+
+                    return tarjetasCedula.entries.map<Widget>((entry) {
+                      final cedulaKey = entry.key;
+                      final cedula = entry.value as Map<String, dynamic>;
+                      return GestureDetector(
+                        onTap: () => _showDeleteDialog(doc, cedulaKey, cedula),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: IdentificationCard(
+                            idNumber: cedula['numeroCedula'].toString(),
+                            holderName: cedula['nombreCompleto'],
+                            firstLastname: cedula['primerApellido'],
+                            secondLastname: cedula['segundoApellido'],
+                            idBackgroundImageAssetPath:
+                                "assets/images/card_bg.png",
+                            logoAssetPath:
+                                "assets/images/bandera-costarica.png",
+                            profileImageAssetPath:
+                                "assets/images/perfilcedula.jpeg",
+                          ),
+                        ),
+                      );
+                    }).toList();
+                  }).toList();
+
+                  return items.isEmpty
+                      ? const Center(
+                          child: Text(
+                            'No hay cédulas disponibles',
+                            style: TextStyle(fontSize: 14), // Tamaño de fuente ajustado a 14
+                          ),
+                        )
+                      : StackedCardCarousel(
+                          spaceBetweenItems: 260,
+                          items: items,
+                        );
+                },
+              ),
       ),
-    );
-  }
+    ),
+  );
+}
 }
