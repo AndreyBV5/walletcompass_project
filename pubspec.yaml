@@ -82,6 +82,8 @@ flutter:
   - assets/images/LOGO.png
   - assets/images/tarjetas.png
   - assets/images/carnet.png
+  - assets/images/amex.png
+  - assets/images/visa.png
   
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

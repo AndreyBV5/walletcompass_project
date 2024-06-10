@@ -46,10 +46,15 @@ class _ExpenseControlState extends State<ExpenseControl> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       floatingActionButtonLocation: CustomFabLocation(),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.black,
         onPressed: openNewExpenseBox,
-        child: const Icon(Icons.add),
+        child: const Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
       ),
       body: Column(
         children: [
@@ -62,9 +67,8 @@ class _ExpenseControlState extends State<ExpenseControl> {
                     cardNumber: cardData['numeroTarjeta'].toString(),
                     cardHolderName: cardData['nombreTitular'].toString(),
                     expiryDate: cardData['fechaExpiracion'].toString(),
-                    cardBackgroundImageUrl:
-                        'https://cdn.mos.cms.futurecdn.net/DoZSMXF87kCuzbymsuEFHo.jpg',
-                    logoAssetPath: 'assets/images/Mastercard-Logo.png',
+                    logoAssetPath:
+                        getCardLogo(cardData['numeroTarjeta'].toString()),
                     onLongPress: null,
                     onTap: () {},
                   ),
@@ -85,7 +89,10 @@ class _ExpenseControlState extends State<ExpenseControl> {
                       builder: (BuildContext context,
                           AsyncSnapshot<DocumentSnapshot> snapshot) {
                         if (!snapshot.hasData) {
-                          return const CircularProgressIndicator();
+                          return const CircularProgressIndicator(
+                            backgroundColor: Colors.white,
+                            strokeWidth: 0,
+                          );
                         }
 
                         var data =
@@ -93,7 +100,7 @@ class _ExpenseControlState extends State<ExpenseControl> {
                         if (data == null) {
                           return const Center(
                               child: Text(
-                                  'No hay datos disponlbles. Agregue un gasto.'));
+                                  'No hay datos disponibles. Agregue un gasto.'));
                         }
 
                         var tarjetasCredito =
@@ -373,5 +380,28 @@ class _ExpenseControlState extends State<ExpenseControl> {
       },
       child: const Text('Borrar'),
     );
+  }
+
+  String getCardLogo(String cardNumber) {
+    if (cardNumber.startsWith('34') ||
+        cardNumber.startsWith('35') ||
+        cardNumber.startsWith('36') ||
+        cardNumber.startsWith('37')) {
+      return 'assets/images/amex.png';
+    } else if (cardNumber.startsWith('4')) {
+      return 'assets/images/visa.png';
+    } else if (cardNumber.startsWith('23') ||
+        cardNumber.startsWith('24') ||
+        cardNumber.startsWith('25') ||
+        cardNumber.startsWith('26') ||
+        cardNumber.startsWith('51') ||
+        cardNumber.startsWith('52') ||
+        cardNumber.startsWith('53') ||
+        cardNumber.startsWith('54') ||
+        cardNumber.startsWith('55')) {
+      return 'assets/images/Mastercard-Logo.png';
+    } else {
+      return 'assets/images/Mastercard-Logo.png'; // logo por defecto
+    }
   }
 }

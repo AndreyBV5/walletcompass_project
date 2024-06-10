@@ -6,7 +6,6 @@ class CreditCard extends StatefulWidget {
     required this.cardNumber,
     required this.cardHolderName,
     required this.expiryDate,
-    required this.cardBackgroundImageUrl,
     required this.logoAssetPath,
     this.onLongPress,
     required this.onTap,
@@ -15,7 +14,6 @@ class CreditCard extends StatefulWidget {
   final String cardNumber;
   final String cardHolderName;
   final String expiryDate;
-  final String cardBackgroundImageUrl;
   final String logoAssetPath;
   final VoidCallback? onLongPress;
   final VoidCallback onTap;
@@ -36,10 +34,7 @@ class _CreditCardState extends State<CreditCard> {
         height: 250,
         width: 350,
         decoration: BoxDecoration(
-          image: DecorationImage(
-            image: NetworkImage(widget.cardBackgroundImageUrl),
-            fit: BoxFit.cover,
-          ),
+          color: Colors.black,
           borderRadius: BorderRadius.circular(15),
         ),
         child: Padding(
@@ -57,7 +52,7 @@ class _CreditCardState extends State<CreditCard> {
                 ),
               ),
               Text(
-                widget.cardNumber,
+                _formatCardNumber(widget.cardNumber),
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 20,
@@ -88,6 +83,26 @@ class _CreditCardState extends State<CreditCard> {
         ),
       ),
     );
+  }
+
+  String _formatCardNumber(String cardNumber) {
+    if (cardNumber.length <= 4) {
+      return cardNumber; // Si el número de tarjeta tiene 4 dígitos o menos, no censurar ni formatear
+    }
+    String censored = cardNumber.replaceRange(
+        0, cardNumber.length - 4, 'X' * (cardNumber.length - 4));
+    return _addSpaces(censored);
+  }
+
+  String _addSpaces(String cardNumber) {
+    final buffer = StringBuffer();
+    for (int i = 0; i < cardNumber.length; i++) {
+      if (i % 4 == 0 && i != 0) {
+        buffer.write(' ');
+      }
+      buffer.write(cardNumber[i]);
+    }
+    return buffer.toString();
   }
 
   void _showDeleteConfirmationDialog(BuildContext context) {

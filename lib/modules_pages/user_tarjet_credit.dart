@@ -82,9 +82,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                       cardNumber: cardData['numeroTarjeta'],
                       cardHolderName: cardData['nombreTitular'],
                       expiryDate: cardData['fechaExpiracion'],
-                      cardBackgroundImageUrl:
-                          'https://cdn.mos.cms.futurecdn.net/DoZSMXF87kCuzbymsuEFHo.jpg',
-                      logoAssetPath: 'assets/images/Mastercard-Logo.png',
+                      logoAssetPath: _getCardLogo(cardData['numeroTarjeta']),
                       onLongPress: () async {
                         await FirebaseFirestore.instance
                             .collection('PerfilPrueba')
@@ -134,6 +132,29 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         },
       ),
     );
+  }
+
+  String _getCardLogo(String cardNumber) {
+    if (cardNumber.startsWith('34') ||
+        cardNumber.startsWith('35') ||
+        cardNumber.startsWith('36') ||
+        cardNumber.startsWith('37')) {
+      return 'assets/images/amex.png';
+    } else if (cardNumber.startsWith('4')) {
+      return 'assets/images/visa.png';
+    } else if (cardNumber.startsWith('23') ||
+        cardNumber.startsWith('24') ||
+        cardNumber.startsWith('25') ||
+        cardNumber.startsWith('26') ||
+        cardNumber.startsWith('51') ||
+        cardNumber.startsWith('52') ||
+        cardNumber.startsWith('53') ||
+        cardNumber.startsWith('54') ||
+        cardNumber.startsWith('55')) {
+      return 'assets/images/Mastercard-Logo.png';
+    } else {
+      return 'assets/images/Mastercard-Logo.png'; // logo por defecto
+    }
   }
 
   Future<int> obtenerNumeroTarjetasCredito(String userId) async {
