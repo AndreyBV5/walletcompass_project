@@ -46,9 +46,7 @@ class CarnetEstudiante extends StatelessWidget {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(
-                            left:
-                                10),
+                        padding: const EdgeInsets.only(left: 10),
                         child: Text(
                           numeroCarnet,
                           style: const TextStyle(
@@ -124,23 +122,19 @@ class CarnetEstudiante extends StatelessWidget {
               left: 0,
               child: Image.asset(
                 'assets/images/LOGO.png',
-                width: 70,
-                height: 70,
+                width: 90,
+                height: 80,
               ),
             ),
             Positioned(
               top: 50,
-              right: 0,
+              right: 5,
               child: Container(
                 width: 90,
                 height: 90,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(10),
-                  image: const DecorationImage(
-                    image: AssetImage('assets/images/perfilcedula.jpeg'),
-                    fit: BoxFit.cover,
-                  ),
                 ),
               ),
             ),

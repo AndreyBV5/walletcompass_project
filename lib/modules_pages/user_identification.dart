@@ -180,8 +180,6 @@ Widget build(BuildContext context) {
                             holderName: cedula['nombreCompleto'],
                             firstLastname: cedula['primerApellido'],
                             secondLastname: cedula['segundoApellido'],
-                            idBackgroundImageAssetPath:
-                                "assets/images/card_bg.png",
                             logoAssetPath:
                                 "assets/images/bandera-costarica.png",
                             profileImageAssetPath:

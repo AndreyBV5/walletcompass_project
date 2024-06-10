@@ -6,6 +6,7 @@ class TextFieldIdentificationWidget extends StatefulWidget {
   final String text;
   final ValueChanged<String> onChanged;
   final IconData? prefixIcon;
+  final TextAlign textAlign; // Nueva propiedad
 
   const TextFieldIdentificationWidget({
     super.key,
@@ -14,6 +15,7 @@ class TextFieldIdentificationWidget extends StatefulWidget {
     required this.text,
     required this.onChanged,
     this.prefixIcon,
+    this.textAlign = TextAlign.start, // Valor por defecto
   });
 
   @override
@@ -52,7 +54,7 @@ class _TextFieldIdentificationWidgetState
       borderRadius: BorderRadius.circular(5),
       borderSide: BorderSide(
         color: color,
-        width: 1.5, // Ajusta el grosor del borde aquí
+        width: 0.5, // Ajusta el grosor del borde aquí
       ),
     );
   }
@@ -66,6 +68,7 @@ class _TextFieldIdentificationWidgetState
             width: 350,
             child: TextField(
               controller: controller,
+              textAlign: widget.textAlign, // Aplicar la alineación del texto
               decoration: InputDecoration(
                 labelText: widget.label,
                 labelStyle: const TextStyle(color: Colors.black),
@@ -85,7 +88,7 @@ class _TextFieldIdentificationWidgetState
                 focusedBorder: _buildBorder(Colors.grey),
                 enabledBorder: _buildBorder(Colors.black),
                 contentPadding:
-                    const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                 filled: true,
                 fillColor: Colors.white,
               ),

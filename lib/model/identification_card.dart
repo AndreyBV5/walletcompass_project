@@ -2,21 +2,19 @@ import 'package:flutter/material.dart';
 
 class IdentificationCard extends StatelessWidget {
   const IdentificationCard({
-    Key? key,
+    super.key,
     required this.idNumber,
     required this.holderName,
     required this.firstLastname,
     required this.secondLastname,
-    required this.idBackgroundImageAssetPath,
     required this.logoAssetPath,
     this.profileImageAssetPath,
-  }) : super(key: key);
+  });
 
   final String idNumber;
   final String holderName;
   final String firstLastname;
   final String secondLastname;
-  final String idBackgroundImageAssetPath;
   final String logoAssetPath;
   final String? profileImageAssetPath;
 
@@ -26,25 +24,21 @@ class IdentificationCard extends StatelessWidget {
       height: 250,
       width: 350,
       decoration: BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage(idBackgroundImageAssetPath),
-          fit: BoxFit.cover,
-        ),
+        color: const Color.fromARGB(255, 196, 218, 229), 
         borderRadius: BorderRadius.circular(15),
       ),
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Stack(
           children: [
-            // Resto del contenido
             Positioned(
               bottom: 110,
               right: 5,
               child: Container(
-                width: 90, // Tamaño de la imagen de perfil
-                height: 100, // Tamaño de la imagen de perfil
+                width: 90, 
+                height: 100, 
                 decoration: BoxDecoration(
-                  color: Colors.white, // Establece el color de fondo blanco
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: profileImageAssetPath == null
@@ -81,14 +75,14 @@ class IdentificationCard extends StatelessWidget {
                           Text(
                             'REPÚBLICA DE COSTA RICA',
                             style: TextStyle(
-                              color: Colors.white,
+                              color: Colors.black,
                               fontSize: 12,
                             ),
                           ),
                           Text(
                             'Tribunal Supremo de Elecciones',
                             style: TextStyle(
-                              color: Colors.white,
+                              color: Colors.black,
                               fontSize: 8,
                               fontWeight: FontWeight.bold,
                             ),
@@ -97,7 +91,7 @@ class IdentificationCard extends StatelessWidget {
                           Text(
                             'Cédula de Identificación',
                             style: TextStyle(
-                              color: Colors.white,
+                              color: Colors.black,
                               fontSize: 8,
                               fontWeight: FontWeight.bold,
                             ),
@@ -113,7 +107,7 @@ class IdentificationCard extends StatelessWidget {
                     child: Text(
                       idNumber,
                       style: const TextStyle(
-                        color: Colors.white,
+                        color: Colors.black,
                         fontSize: 18,
                         letterSpacing: 2,
                         fontWeight: FontWeight.bold,
@@ -132,14 +126,14 @@ class IdentificationCard extends StatelessWidget {
                             const TextSpan(
                               text: 'Nombre: ',
                               style: TextStyle(
-                                color: Colors.white,
+                                color: Colors.black,
                                 fontSize: 8,
                               ),
                             ),
                             TextSpan(
                               text: holderName,
                               style: const TextStyle(
-                                color: Colors.white,
+                                color: Colors.black,
                                 fontSize: 10,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -154,14 +148,14 @@ class IdentificationCard extends StatelessWidget {
                           const TextSpan(
                             text: '1° Apellido: ',
                             style: TextStyle(
-                              color: Colors.white,
+                              color: Colors.black,
                               fontSize: 8,
                             ),
                           ),
                           TextSpan(
                             text: firstLastname,
                             style: const TextStyle(
-                              color: Colors.white,
+                              color: Colors.black,
                               fontSize: 10,
                               fontWeight: FontWeight.bold,
                             ),
@@ -175,14 +169,14 @@ class IdentificationCard extends StatelessWidget {
                           const TextSpan(
                             text: '2° Apellido: ',
                             style: TextStyle(
-                              color: Colors.white,
+                              color: Colors.black,
                               fontSize: 8,
                             ),
                           ),
                           TextSpan(
                             text: secondLastname,
                             style: const TextStyle(
-                              color: Colors.white,
+                              color: Colors.black,
                               fontSize: 10,
                               fontWeight: FontWeight.bold,
                             ),

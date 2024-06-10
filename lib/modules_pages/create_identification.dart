@@ -1,5 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:copia_walletfirebase/model/identification_card.dart';
 import 'package:copia_walletfirebase/modules_pages/some_components/textfield_identification_widget.dart';
@@ -98,7 +98,7 @@ class _CreateIdentificationFormState extends State<CreateIdentificationForm> {
   void _showSuccessAlert() {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text('Datos de identificación insertados correctamente.'),
+        content: Text('Indentificación creada correctamente.'),
         backgroundColor: Colors.green,
       ),
     );
@@ -151,77 +151,71 @@ class _CreateIdentificationFormState extends State<CreateIdentificationForm> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const SizedBox(
-                    height:
-                        16), // Espacio añadido para mover la tarjeta hacia arriba
+                const SizedBox(height: 16), // Espacio añadido para mover la tarjeta hacia arriba
                 IdentificationCard(
                   idNumber: idNumberController.text,
                   holderName: holderNameController.text,
                   firstLastname: firstLastnameController.text,
                   secondLastname: secondLastnameController.text,
-                  idBackgroundImageAssetPath: "assets/images/card_bg.png",
                   logoAssetPath: "assets/images/bandera-costarica.png",
                   profileImageAssetPath: "",
                 ),
-                const SizedBox(
-                    height: 16), // Reducido el espacio entre elementos
-                Container(
-                  width: double.infinity, // Ancho máximo
-                  alignment: Alignment.center,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TextFieldIdentificationWidget(
-                        label: 'Número de identificación',
-                        text: idNumberController.text,
-                        onChanged: (text) {
-                          setState(() {
-                            idNumberController.text = text;
-                          });
-                        },
-                      ),
-                      const SizedBox(height: 10),
-                      TextFieldIdentificationWidget(
-                        label: 'Nombre completo',
-                        text: holderNameController.text,
-                        onChanged: (text) {
-                          setState(() {
-                            holderNameController.text = text;
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Row(
+                const SizedBox(height: 16), // Reducido el espacio entre elementos
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
-                      child: TextFieldIdentificationWidget(
-                        label: 'Primer apellido',
-                        text: firstLastnameController.text,
-                        onChanged: (text) {
-                          setState(() {
-                            firstLastnameController.text = text;
-                          });
-                        },
-                      ),
+                    TextFieldIdentificationWidget(
+                      label: 'Número de identificación',
+                      text: idNumberController.text,
+                      onChanged: (text) {
+                        setState(() {
+                          idNumberController.text = text;
+                        });
+                      },
                     ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: TextFieldIdentificationWidget(
-                        label: 'Segundo apellido',
-                        text: secondLastnameController.text,
-                        onChanged: (text) {
-                          setState(() {
-                            secondLastnameController.text = text;
-                          });
-                        },
-                      ),
+                    const SizedBox(height: 10),
+                    TextFieldIdentificationWidget(
+                      label: 'Nombre completo',
+                      text: holderNameController.text,
+                      onChanged: (text) {
+                        setState(() {
+                          holderNameController.text = text;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextFieldIdentificationWidget(
+                            label: 'Primer apellido',
+                            text: firstLastnameController.text,
+                            onChanged: (text) {
+                              setState(() {
+                                firstLastnameController.text = text;
+                              });
+                            },
+                            textAlign: TextAlign.center, // Centrando el texto
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: TextFieldIdentificationWidget(
+                            label: 'Segundo apellido',
+                            text: secondLastnameController.text,
+                            onChanged: (text) {
+                              setState(() {
+                                secondLastnameController.text = text;
+                              });
+                            },
+                            textAlign: TextAlign.center, // Centrando el texto
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 10),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
@@ -237,7 +231,7 @@ class _CreateIdentificationFormState extends State<CreateIdentificationForm> {
                       'Crear Identificación',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 16,
+                        fontSize: 14,
                       ),
                     ),
                   ),
