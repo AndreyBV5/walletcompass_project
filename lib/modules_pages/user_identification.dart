@@ -160,6 +160,11 @@ class _IdentificationState extends State<Identification> {
         backgroundColor: Colors.white,
         appBar: AppBar(
           backgroundColor: Colors.white,
+          centerTitle: true,
+          title: const Text(
+            'Identificaciones',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
         ),
         drawer: const NavigationDrawerComponent(),
         bottomNavigationBar: const BottomNavigationIdentification(),
@@ -170,7 +175,7 @@ class _IdentificationState extends State<Identification> {
               : idDocuments.isEmpty
                   ? const Center(
                       child: Text(
-                        'No hay cédulas disponibles',
+                        'No hay identificaciones disponibles',
                         style: TextStyle(fontSize: 14),
                       ),
                     )

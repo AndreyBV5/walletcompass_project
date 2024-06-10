@@ -103,7 +103,7 @@ class _CreateIdentificationFormState extends State<CreateIdentificationForm> {
       ),
     );
 
-    Future.delayed(const Duration(seconds: 2), () {
+    Future.delayed(const Duration(milliseconds: 100), () {
       Navigator.of(context).pushReplacementNamed('/user_identification');
     });
   }
@@ -127,6 +127,7 @@ class _CreateIdentificationFormState extends State<CreateIdentificationForm> {
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
+        backgroundColor: Colors.white,
         appBar: AppBar(
           title: const Text('Crear Cédula de Estudiante'),
           backgroundColor: const Color.fromARGB(255, 255, 251, 251),
@@ -151,7 +152,9 @@ class _CreateIdentificationFormState extends State<CreateIdentificationForm> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const SizedBox(height: 16), // Espacio añadido para mover la tarjeta hacia arriba
+                const SizedBox(
+                    height:
+                        16), // Espacio añadido para mover la tarjeta hacia arriba
                 IdentificationCard(
                   idNumber: idNumberController.text,
                   holderName: holderNameController.text,
@@ -160,7 +163,8 @@ class _CreateIdentificationFormState extends State<CreateIdentificationForm> {
                   logoAssetPath: "assets/images/bandera-costarica.png",
                   profileImageAssetPath: "",
                 ),
-                const SizedBox(height: 16), // Reducido el espacio entre elementos
+                const SizedBox(
+                    height: 16), // Reducido el espacio entre elementos
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

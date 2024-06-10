@@ -24,6 +24,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       appBar: AppBar(
         backgroundColor: Colors.white,
         centerTitle: true,
+        title: const Text(
+          'Tarjetas',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
       ),
       drawer: const NavigationDrawerComponent(),
       bottomNavigationBar: const BottomNavigationBarApp(),

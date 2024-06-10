@@ -79,7 +79,14 @@ class _CarnetState extends State<Carnet> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(backgroundColor: Colors.white),
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        centerTitle: true,
+        title: const Text(
+          'Carnés',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+      ),
       drawer: const NavigationDrawerComponent(),
       bottomNavigationBar: const BottomNavigationCarnet(),
       body: Padding(
@@ -201,8 +208,18 @@ class _CarnetState extends State<Carnet> with SingleTickerProviderStateMixin {
 
             tarjetasCarnet.remove(cardKey);
 
+            // Reordenar los carnés
+            List<String> keys = tarjetasCarnet.keys.toList();
+            keys.sort((a, b) => a.compareTo(b));
+            Map<String, dynamic> nuevasCedulas = {};
+            for (int i = 0; i < keys.length; i++) {
+              String oldKey = keys[i];
+              String newKey = 'carnet${i + 1}';
+              nuevasCedulas[newKey] = tarjetasCarnet[oldKey];
+            }
+
             transaction
-                .update(snapshot.reference, {'TarjetaCarnet': tarjetasCarnet});
+                .update(snapshot.reference, {'TarjetaCarnet': nuevasCedulas});
           }
         });
 
