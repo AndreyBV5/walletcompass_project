@@ -88,7 +88,7 @@ class _CreateCarnetFormState extends State<CreateCarnetForm> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Datos de carné insertados correctamente.'),
+          content: Text('Carné creado correctamente.'),
           backgroundColor: Colors.green,
         ),
       );

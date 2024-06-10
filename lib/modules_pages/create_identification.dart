@@ -179,7 +179,7 @@ class _CreateIdentificationFormState extends State<CreateIdentificationForm> {
                     ),
                     const SizedBox(height: 10),
                     TextFieldIdentificationWidget(
-                      label: 'Nombre completo',
+                      label: 'Nombre ',
                       text: holderNameController.text,
                       onChanged: (text) {
                         setState(() {
