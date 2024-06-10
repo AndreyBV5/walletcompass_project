@@ -91,7 +91,7 @@ class _NavigationDrawerComponentState extends State<NavigationDrawerComponent> {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.credit_card),
+              leading: const Icon(Icons.portrait_rounded),
               title: const Text("Ver Carnet Estudiantil"),
               onTap: () {
                 Navigator.of(context).pushReplacement(MaterialPageRoute(

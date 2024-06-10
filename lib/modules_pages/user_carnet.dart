@@ -44,8 +44,7 @@ class _CarnetState extends State<Carnet> with SingleTickerProviderStateMixin {
         final data = snapshot.data() as Map<String, dynamic>?;
 
         if (data != null) {
-          final tarjetasCarnet =
-              data['TarjetaCarnet'] as Map<String, dynamic>?;
+          final tarjetasCarnet = data['TarjetaCarnet'] as Map<String, dynamic>?;
 
           if (tarjetasCarnet != null) {
             setState(() {
@@ -79,13 +78,14 @@ class _CarnetState extends State<Carnet> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      backgroundColor: Colors.white,
+      appBar: AppBar(backgroundColor: Colors.white),
       drawer: const NavigationDrawerComponent(),
       bottomNavigationBar: const BottomNavigationCarnet(),
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: isLoading
-            ? Center(
+            ? const Center(
                 child: CircularProgressIndicator(),
               )
             : cardDocuments.isEmpty
@@ -110,14 +110,18 @@ class _CarnetState extends State<Carnet> with SingleTickerProviderStateMixin {
                                 onTap: () => _showDeleteConfirmationDialog(
                                     card['key'], card['data']),
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 8.0),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 8.0),
                                   child: CarnetEstudiante(
-                                    numeroTarjeta: card['data']['numeroTarjeta'].toString(),
-                                    nombreTitular: card['data']['nombreTitular'],
-                                    apellidosTitular: card['data']['apellidosTitular'],
+                                    numeroTarjeta: card['data']['numeroTarjeta']
+                                        .toString(),
+                                    nombreTitular: card['data']
+                                        ['nombreTitular'],
+                                    apellidosTitular: card['data']
+                                        ['apellidosTitular'],
                                     numeroCarnet: card['data']['numeroCarnet'],
-                                    fechaVencimiento: card['data']['fechaVencimiento'],
+                                    fechaVencimiento: card['data']
+                                        ['fechaVencimiento'],
                                   ),
                                 ),
                               ))
@@ -152,14 +156,14 @@ class _CarnetState extends State<Carnet> with SingleTickerProviderStateMixin {
     );
   }
 
-  void _showDeleteConfirmationDialog(String cardKey, Map<String, dynamic> cardData) {
+  void _showDeleteConfirmationDialog(
+      String cardKey, Map<String, dynamic> cardData) {
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
           title: const Text('Eliminar Carné'),
-          content:
-              const Text('¿Está seguro de que desea eliminar este carné?'),
+          content: const Text('¿Está seguro de que desea eliminar este carné?'),
           actions: [
             TextButton(
               onPressed: () {
@@ -185,10 +189,9 @@ class _CarnetState extends State<Carnet> with SingleTickerProviderStateMixin {
       final user = FirebaseAuth.instance.currentUser;
       if (user != null) {
         await FirebaseFirestore.instance.runTransaction((transaction) async {
-          final snapshot = await transaction.get(
-              FirebaseFirestore.instance
-                  .collection('PerfilPrueba')
-                  .doc(user.uid));
+          final snapshot = await transaction.get(FirebaseFirestore.instance
+              .collection('PerfilPrueba')
+              .doc(user.uid));
 
           if (snapshot.exists) {
             final Map<String, dynamic> data =
@@ -198,7 +201,8 @@ class _CarnetState extends State<Carnet> with SingleTickerProviderStateMixin {
 
             tarjetasCarnet.remove(cardKey);
 
-            transaction.update(snapshot.reference, {'TarjetaCarnet': tarjetasCarnet});
+            transaction
+                .update(snapshot.reference, {'TarjetaCarnet': tarjetasCarnet});
           }
         });
 

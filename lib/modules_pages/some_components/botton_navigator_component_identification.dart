@@ -86,9 +86,7 @@ class _BottomNavigationBarState extends State<BottomNavigationIdentification> {
                   Text(
                     "Crear Identificación",
                     style: TextStyle(
-                      color: _selectedIndex == 0
-                          ? Colors.deepPurple
-                          : Colors.black,
+                      color: _selectedIndex == 0 ? Colors.black : Colors.black,
                     ),
                   ),
                 ],

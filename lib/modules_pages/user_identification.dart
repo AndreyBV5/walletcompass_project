@@ -44,7 +44,8 @@ class _IdentificationState extends State<Identification> {
             final data = snapshot.data() as Map<String, dynamic>?;
 
             if (data != null) {
-              final tarjetasCedula = data['TarjetasCedula'] as Map<String, dynamic>?;
+              final tarjetasCedula =
+                  data['TarjetasCedula'] as Map<String, dynamic>?;
 
               if (tarjetasCedula != null) {
                 idDocuments = [snapshot];
@@ -76,7 +77,8 @@ class _IdentificationState extends State<Identification> {
       builder: (context) {
         return AlertDialog(
           title: const Text('Eliminar Identificación'),
-          content: const Text('¿Está seguro de que desea eliminar esta identificación?'),
+          content: const Text(
+              '¿Está seguro de que desea eliminar esta identificación?'),
           actions: [
             TextButton(
               onPressed: () {
@@ -155,7 +157,10 @@ class _IdentificationState extends State<Identification> {
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
-        appBar: AppBar(),
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+        ),
         drawer: const NavigationDrawerComponent(),
         bottomNavigationBar: const BottomNavigationIdentification(),
         body: Padding(
@@ -171,7 +176,8 @@ class _IdentificationState extends State<Identification> {
                     )
                   : Builder(
                       builder: (context) {
-                        final List<Widget> items = idDocuments.expand<Widget>((doc) {
+                        final List<Widget> items =
+                            idDocuments.expand<Widget>((doc) {
                           final data = doc.data() as Map<String, dynamic>?;
 
                           if (data == null) {
@@ -188,9 +194,11 @@ class _IdentificationState extends State<Identification> {
                             final cedulaKey = entry.key;
                             final cedula = entry.value as Map<String, dynamic>;
                             return GestureDetector(
-                              onTap: () => _showDeleteDialog(doc, cedulaKey, cedula),
+                              onTap: () =>
+                                  _showDeleteDialog(doc, cedulaKey, cedula),
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8.0),
                                 child: IdentificationCard(
                                   idNumber: cedula['numeroCedula'].toString(),
                                   holderName: cedula['nombreCompleto'],
