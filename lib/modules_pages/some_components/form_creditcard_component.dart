@@ -124,6 +124,7 @@ class _FormCreditCardState extends State<FormCreditCard> {
                         ),
                       ),
                     ],
+                    labelCardHolder: 'NOMBRE TITULAR',
                   ),
                   Expanded(
                     child: SingleChildScrollView(
@@ -141,6 +142,17 @@ class _FormCreditCardState extends State<FormCreditCard> {
                             cardHolderName: cardHolderName,
                             expiryDate: expiryDate,
                             onCreditCardModelChange: onCreditCardModelChange,
+                            cvvValidationMessage: 'Introduce un CVV válido',
+                            dateValidationMessage: 'Ingrese una fecha válida',
+                            numberValidationMessage:
+                                'Por favor ingrese un número válido',
+                            inputConfiguration: const InputConfiguration(
+                                cardNumberDecoration: InputDecoration(
+                                    labelText: 'Número de Tarjeta'),
+                                expiryDateDecoration:
+                                    InputDecoration(labelText: 'Expiración'),
+                                cardHolderDecoration: InputDecoration(
+                                    labelText: 'Nombre Titular')),
                           ),
                           const SizedBox(height: 20),
                           GestureDetector(
@@ -202,8 +214,7 @@ class _FormCreditCardState extends State<FormCreditCard> {
 
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content:
-                  Text('Datos de tarjeta de crédito insertados correctamente.'),
+              content: Text('Tarjeta creada correctamente.'),
               backgroundColor: Colors.green,
             ),
           );
@@ -225,7 +236,7 @@ class _FormCreditCardState extends State<FormCreditCard> {
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error al insertar datos de tarjeta de crédito: $e'),
+            content: Text('Error al crear tarjeta: $e'),
             backgroundColor: Colors.red,
           ),
         );
