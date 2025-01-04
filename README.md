@@ -1,7 +1,7 @@
 
 # Wallet Compass 👝💵
 
-Sistema de Seguridad Facial (Face Security Guard) es un proyecto desarrollado en Python que ofrece funcionalidades avanzadas de reconocimiento y verificación facial. El sistema permite realizar un  registro facial de usuarios y posteriormente realizar un inicio de sesión facial para autenticar la identidad del usuario, garantizando que quien inicia sesión es una persona real y no una fotografía o un robot.
+WalletCompass es un proyecto desarrollado en flutter que ofrece funcionabilidades interactivas que se encargan de simular una billetera virtual. La app permite crear una simulación de tarjetas de banco, identificaciones (cédula) y carnet estudiantiles. Cada tarjeta de banco creada tiene una función para gestionar gastos a través de un flujo de datos en firebase.
 
 ## 🖥️Funcionalidades del Sistema
 
